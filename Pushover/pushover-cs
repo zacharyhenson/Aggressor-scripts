@@ -1,0 +1,16 @@
+#!/bin/bash
+# Very simple pushover bash script. Can be piped to, or fed text via argv(s)
+# should be stored in /usr/bin/pushover-<app abbreviation>
+
+if [[ $# -gt 0 ]]; then
+        a=$@
+else
+        read a;
+fi
+
+pushover () {
+	curl -s -F "token=$1" -F "user=$2" -F "title=$3" -F "message=$a" https://api.pushover.net/1/messages.json
+}
+
+# sample pushover user config
+# pushover <app_token> <user_token> <app_title> "$a" #sample_username1
