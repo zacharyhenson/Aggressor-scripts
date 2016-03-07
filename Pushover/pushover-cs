@@ -1,11 +1,10 @@
-#!/bin/bash
-# Very simple pushover bash script. Can be piped to, or fed text via argv(s)
-# should be stored in /usr/bin/pushover-<app abbreviation>
-
-if [[ $# -gt 0 ]]; then
-        a=$@
-else
-        read a;
+#!/bin/bash 
+if [[ $# -gt 0 ]]; then 
+	title=$1
+	shift
+	a=$@ 
+else 
+	read a; 
 fi
 
 pushover () {
@@ -13,4 +12,5 @@ pushover () {
 }
 
 # sample pushover user config
-# pushover <app_token> <user_token> <app_title> "$a" #sample_username1
+# add a line for each user you wish to receive a message
+# pushover <app_token> <user_token> "$title" "$a" #sample_username1
