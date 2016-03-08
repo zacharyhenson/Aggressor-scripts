@@ -1,48 +1,50 @@
 # This script adds basic pushover functionality to Cobalt Strike
-# by Und3rf10w
+# Move or copy pushover-cs to /usr/bin/pushover-cs, ensure it is executeable
+# Ensure that you configure the pushover users in pushover-cs
+# @Und3rf10w
  
 on ready {
-        elog("Pushover notifications are now configured");
+	elog("Pushover notifications are now configured");
 }
  
 on event_notify {
-        $push = exec("/usr/bin/pushover-cs System_Event $2 $+ : $1");
-        @pushdata = readAll($push);
-        closef($push);
+	$push = exec("/usr/bin/pushover-cs System_Event $2 $+ : $1");
+	@pushdata = readAll($push);
+	closef($push);
 }
  
 on event_join {
-        $push = exec("/usr/bin/pushover-cs User_Joined $2 $+ : $1 has joined");
-        @pushdata = readAll($push);
-        closef($push);
+	$push = exec("/usr/bin/pushover-cs User_Joined $2 $+ : $1 has joined");
+    @pushdata = readAll($push);
+    closef($push);
 }
  
 on event_newsite {
-        $push = exec("/usr/bin/pushover-cs New_Site_Added $3 $+ : $1 $+ : $2 ");
-        @pushdata = readAll($push);
-        closef($push);
+    $push = exec("/usr/bin/pushover-cs New_Site_Added $3 $+ : $1 $+ : $2 ");
+    @pushdata = readAll($push);
+    closef($push);
 }
  
 on event_action {
-        $push = exec("/usr/bin/pushover-cs Action_Performed $2 $+ : < $+ $3 $+ >: $1 ");
-        @pushdata = readAll($push);
-        closef($push);
+    $push = exec("/usr/bin/pushover-cs Action_Performed $2 $+ : < $+ $3 $+ >: $1 ");
+    @pushdata = readAll($push);
+    closef($push);
 }
  
 on event_public {
-        $push = exec("/usr/bin/pushover-cs New_Message $3 $+ : < $+ $1 $+ >: $2 ");
-        @pushdata = readAll($push);
-        closef($push);
+	$push = exec("/usr/bin/pushover-cs New_Message $3 $+ : < $+ $1 $+ >: $2 ");
+    @pushdata = readAll($push);
+    closef($push);
 }
  
 on event_quit {
-        $push = exec("/usr/bin/pushover-cs User_Left $2 $+ : $1 has quit");
-        @pushdata = readAll($push);
-        closef($push);
+    $push = exec("/usr/bin/pushover-cs User_Left $2 $+ : $1 has quit");
+    @pushdata = readAll($push);
+    closef($push);
 }
  
 on event_beacon_inital {
-        $push = exec("/usr/bin/pushover-cs New_Beacon $2 $+ : $1 ");
-        @pushdata = readAll($push);
-        closef($push);
+    $push = exec("/usr/bin/pushover-cs New_Beacon $2 $+ : $1 ");
+    @pushdata = readAll($push);
+    closef($push);
 }
