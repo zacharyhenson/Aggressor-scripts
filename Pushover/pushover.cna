@@ -42,9 +42,9 @@ on event_quit {
     @pushdata = readAll($push);
     closef($push);
 }
- 
-on event_beacon_inital {
-    $push = exec("/usr/bin/pushover-cs New_Beacon $2 $+ : $1 ");
+
+on beacon_inital {
+    $push = exec("/usr/bin/pushover-cs New_Beacon New Beacon Received: $1 ");
     @pushdata = readAll($push);
     closef($push);
 }
