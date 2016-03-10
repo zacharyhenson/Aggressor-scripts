@@ -3,7 +3,7 @@
 # Export a Windows Service EXE file
 # Save the exe, something like "GenericPrinterServices.exe" works
 # Inspired by: http://blog.cobaltstrike.com/2016/02/23/cobalt-strike-tips-for-2016-ccdc-red-teams/
-# Load the script, then in the execute with !uploadbackdoor $BEACON_ID $FULL_LOCAL_PATH_TO_SERVICE_EXE
+# Load the script, then in the script console, execute with !uploadbackdoor $BEACON_ID $FULL_LOCAL_PATH_TO_SERVICE_EXE
 # Und3rf10w
 
 sub servicefilename {
