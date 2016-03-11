@@ -1,0 +1,9 @@
+# Returns information about all beacons calling back to the team server
+# Taken straight from the aggressor manual, I just wanted this as a command
+# Und3rf10w
+
+command !beaconinfo {
+	foreach $beacon (beacons()) {
+		println("BeaconID: " . $beacon['id'] . " is " . $beacon['name']);
+	}
+}

