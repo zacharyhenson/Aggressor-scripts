@@ -43,7 +43,7 @@ on event_quit {
     closef($push);
 }
 
-on event_beacon_inital {
+on beacon_initial {
     $push = exec("/usr/bin/pushover-cs New_Beacon New Beacon Received: $1 ");
     @pushdata = readAll($push);
     closef($push);
