@@ -3,11 +3,16 @@
 
 # Adds a menu that posts a message to the log when the beacon next checks in
 popup beacon_bottom{
-	item "Notify on next check-in"{
-		binput(@ids, "checkin");
-		bcheckin(@ids);
-		on beacon_checkin{
-			elog("Beacon: @ids checked in at $3 as requested");
+	menu "Notify"{
+		item "Next check-in"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($bid, "checkin");
+				bcheckin($bid);
+				on beacon_checkin{
+					elog("Beacon: $bid checked in at $3 as requested");
+				}
+			}
 		}
 	}
 }
