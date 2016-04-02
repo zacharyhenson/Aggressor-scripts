@@ -1,0 +1,13 @@
+# Provides a menu to show notification when specified beacon checks in
+# Und3rf10w
+
+# Adds a menu that posts a message to the log when the beacon next checks in
+popup beacon_bottom{
+	item "Notify on next check-in"{
+		binput(@ids, "checkin");
+		bcheckin(@ids);
+		on beacon_checkin{
+			elog("Beacon: @ids checked in at $3 as requested");
+		}
+	}
+}

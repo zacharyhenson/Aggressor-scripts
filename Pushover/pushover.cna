@@ -1,50 +1,50 @@
 # This script adds basic pushover functionality to Cobalt Strike
-# Move or copy pushover-cs to /usr/bin/pushover-cs, ensure it is executeable
-# Ensure that you configure the pushover users in pushover-cs
+# Ensure that you configure the pushover users in pushover-cs, ensure it is executeable
 # @Und3rf10w
  
 on ready {
     elog("Pushover notifications are now configured");
+    $pushover = script_resource("pushover-cs")
 }
  
 on event_notify {
-    $push = exec("/usr/bin/pushover-cs System_Event $2 $+ : $1");
+    $push = exec("$pushover-cs System_Event $2 $+ : $1");
     @pushdata = readAll($push);
     closef($push);
 }
  
 on event_join {
-    $push = exec("/usr/bin/pushover-cs User_Joined $2 $+ : $1 has joined");
+    $push = exec("$pushover-cs User_Joined $2 $+ : $1 has joined");
     @pushdata = readAll($push);
     closef($push);
 }
  
 on event_newsite {
-    $push = exec("/usr/bin/pushover-cs New_Site_Added $3 $+ : $1 $+ : $2 ");
+    $push = exec("$pushover-cs New_Site_Added $3 $+ : $1 $+ : $2 ");
     @pushdata = readAll($push);
     closef($push);
 }
  
 on event_action {
-    $push = exec("/usr/bin/pushover-cs Action_Performed $2 $+ : < $+ $3 $+ >: $1 ");
+    $push = exec("$pushover-cs Action_Performed $2 $+ : < $+ $3 $+ >: $1 ");
     @pushdata = readAll($push);
     closef($push);
 }
  
 on event_public {
-    $push = exec("/usr/bin/pushover-cs New_Message $3 $+ : < $+ $1 $+ >: $2 ");
+    $push = exec("$pushover-cs New_Message $3 $+ : < $+ $1 $+ >: $2 ");
     @pushdata = readAll($push);
     closef($push);
 }
  
 on event_quit {
-    $push = exec("/usr/bin/pushover-cs User_Left $2 $+ : $1 has quit");
+    $push = exec("$pushover-cs User_Left $2 $+ : $1 has quit");
     @pushdata = readAll($push);
     closef($push);
 }
 
 on beacon_initial {
-    $push = exec("/usr/bin/pushover-cs New_Beacon New Beacon Received: $1 ");
+    $push = exec("$pushover-cs New_Beacon New Beacon Received: $1 ");
     @pushdata = readAll($push);
     closef($push);
 }
