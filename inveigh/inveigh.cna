@@ -1,13 +1,21 @@
 # Adds menu driven support for inveigh
+# This is nowhere near done...
+# @Und3rf10w
+
 
 popup beacon_bottom {
 	Menu "Inveigh"{
-		item "Inveigh"{
+		item "Import Inveigh"{
 			local ('$bid');
 			foreach $bid ($1){
 				binput($1, "Imported Inveigh");
 				bpowershell_import($1, script_resource("inveigh\Scripts\Inveigh.ps1"));
 			}			
 		}
+		item "Invoke-Inveigh"
+			local('$bid');
+			foreach $bid ($1){
+
+			}
 	}
 }
