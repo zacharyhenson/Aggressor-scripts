@@ -4,7 +4,7 @@
  
 on ready {
     elog("Pushover notifications are now configured");
-    $pushover = script_resource("pushover-cs")
+    $pushover = script_resource("pushover-cs.sh")
 }
  
 on event_notify {
