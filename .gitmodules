@@ -1,6 +1,0 @@
-[submodule "inveigh/inveigh"]
-	path = inveigh/inveigh
-	url = https://github.com/Kevin-Robertson/Inveigh.git
-[submodule "OutlookPersistence"]
-	path = OutlookPersistence
-	url = https://github.com/Und3rf10w/OutlookPersistence.git
