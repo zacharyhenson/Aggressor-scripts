@@ -4,6 +4,6 @@
 
 command !beaconinfo {
 	foreach $beacon (beacons()) {
-		println("BeaconID: " . $beacon['id'] . " is " . $beacon['name']);
+		println("BeaconID: " . $beacon['id'] . " is " . $beacon['computer']);
 	}
 }

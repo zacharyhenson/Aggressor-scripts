@@ -7,7 +7,7 @@ popup beacon_bottom {
 			local ('$bid');
 			foreach $bid ($1){
 				binput($1, "Imported Inveigh");
-				bpowershell_import($1, script_resource("inveigh\Scripts\Inveigh.ps1"));
+				bpowershell_import($1, script_resource("inveigh/Scripts/Inveigh.ps1"));
 			}			
 		}
 		item "Invoke-Inveigh"
