@@ -4,6 +4,17 @@
 
 command !beaconinfo {
 	foreach $beacon (beacons()) {
-		println("BeaconID: " . $beacon['id'] . " is " . $beacon['computer']);
+		println("Beacon ID: " . $beacon['id'] . " is " . $beacon['computer']);
+	}
+}
+
+popup beacon_bottom {
+	menu "Information" {
+		item "Beacon ID" {
+			local('$bid');
+			foreach $bid ($1) {
+				blog($bid, "This beacon's ID is: " . binfo($bid, "id"));
+			}
+		}
 	}
 }

