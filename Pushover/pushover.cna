@@ -44,7 +44,7 @@ on event_quit {
 }
 
 on beacon_initial {
-    $push = exec("$pushover-cs New_Beacon New Beacon Received: $1 ");
+    $push = exec("$pushover-cs New_Beacon New Beacon Received - ID: $1 | Hostname: " . binfo($1, "computer"));
     @pushdata = readAll($push);
     closef($push);
 }
