@@ -9,6 +9,7 @@
 sub servicefilename {
 	$servicebackdoorfilename = matches($1, '[\/](\w+\.\w+)$');
 	$servicebackdoorfilename = $servicebackdoorfilename[0];
+	return $servicebackdoorfilename;
 }
 
 alias !uploadbackdoor {
