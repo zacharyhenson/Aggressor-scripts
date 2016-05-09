@@ -13,7 +13,7 @@ sub servicefilename {
 }
 
 popup beacon_bottom {
-	Menu "Persistence"{
+	menu "Persistence"{
 		item "Create Backdoor Service"{
 			local ('$bid');
 			foreach $bid ($1){
