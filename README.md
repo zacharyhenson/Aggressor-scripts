@@ -34,3 +34,7 @@ A debugging script I use to get beacon IDs. Works with the beacon menu, and by r
 >inveigh/ 
 
 I couldn't get this to work properly, but it's supposed to be [Inveigh](https://github.com/Kevin-Robertson/Inveigh) support for Cobalt Strike.
+
+>postExploit/
+
+A number of different post-exploit features, including some hilarious ones.
