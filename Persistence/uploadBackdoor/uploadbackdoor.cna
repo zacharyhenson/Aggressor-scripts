@@ -26,8 +26,8 @@ alias !uploadbackdoor {
 	println("\c9[+] Backdoor creation complete!");
 }
 
-beacon_command_register {
+beacon_command_register (
 	"!uploadbackdoor",
 	"Uploads and creates a persistent backdoor to the beacon",
 	"Synopsis: !uploadbackdoor [path to local service exe on your system]"
-}
+);
