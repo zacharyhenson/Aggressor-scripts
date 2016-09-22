@@ -13,7 +13,7 @@ If you didn't follow my instructions and already cloned the repo, go to the root
 
 ## Kits
 
-Most of the useful scripts here are organized in [kits](kits). All you have to do is load the [kitloader.cna](kits/kitloader.cna) script, and it will automatically load all other kits (execpt the DebugKit).
+Most of the useful scripts here are organized in [kits](kits). All you have to do is load the [KitLoader.cna](kits/KitLoader.cna) script, and it will automatically load all other kits (execpt the DebugKit).
 
 ### Kit descriptions
 1. **AnnoyKit**
