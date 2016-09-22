@@ -1,0 +1,20 @@
+# Actions in this kit center around endpoint privilege escalation. Actions that involve forceful scanning (powerup.ps1, unix-privesc-check) should go in the apporiate section
+# @Und3rf10w
+
+popup beacon_bottom {
+	menu "PrivescKit" {
+		menu "Windows"{
+			menu "Scanners"{
+				item "All PowerUp checks"{
+					local('$bid');
+					foreach $bid ($1){
+						binput($bid, "powershell-import PowerUp.ps1");
+						bpowershell_import($bid, script_resource("scripts/PowerUp.ps1"));
+						binput($bid, "powershell Invoke-AllChecks");
+						bpowershell($bid, "Invoke-AllChecks");
+					}
+				}
+			}
+		}
+	}
+}

