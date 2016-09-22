@@ -16,19 +16,32 @@ If you didn't follow my instructions and already cloned the repo, go to the root
 Most of the useful scripts here are organized in [kits](kits). All you have to do is load the [kitloader.cna](kits/kitloader.cna) script, and it will automatically load all other kits (execpt the DebugKit).
 
 ### Kit descriptions
-1. AnnoyKit
+1. **AnnoyKit**
+
   Actions in this kit center around miscellaneous fun thta generally involve messing with the user
-2. AntiForensicsKit
+
+2. **AntiForensicsKit**
+
   Actions in this kit center around antiforensics. If it slows an investigator down, it likely belongs in this kit. We all know antiforensics is best forensics.
-3. CredKit
+
+3. **CredKit**
+
   Actions in this kit center around credential theft, be it via memory scraping or reading files in. If it involves stealing passwords, it should be here.
-4. DebugKit
+
+4. **DebugKit**
+
   This kit is limited to actions that I use for development and debugging, and thus is not loaded with the rest of them.
-5. EnumKit
+
+5. **EnumKit**
+
   Actions in this kit center around host and network enumeration. Credential enumeration actions should go in CredKit instead.
-6. PersistKit
+
+6. **PersistKit**
+
   Actions in this kit center around endpoint persistence. Examples include backdoor service creation, backdoor process creation, etc
-7. PrivEscKit 
+
+7. **PrivEscKit**
+
   Actions in this kit center around endpoint privilege escalation. Actions that involve forceful scanning (powerup.ps1, unix-privesc-check) should go in the apporiate section
 
 # Other scripts
@@ -40,4 +53,4 @@ I couldn't get this to work properly, but it's supposed to be [Inveigh](https://
 
 [Pushover](https://pushover.net) support for Cobalt Strike, ridiculously useful.
 
-See [pushover-cs.sh](Pushover/pushover-cs) for instructions.
+See [pushover-cs](Pushover/pushover-cs) for instructions.
