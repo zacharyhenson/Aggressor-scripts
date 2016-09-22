@@ -4,9 +4,8 @@
 elog("Aggressor Kit started, loading kits...");
 include(script_resource("AnnoyKit/AnnoyKit.cna"));
 include(script_resource("AntiForensicsKit/AntiForensicsKit.cna"));
-include(script_resource("CredKit/Credkit.cna"));
+include(script_resource("CredKit/CredKit.cna"));
 include(script_resource("EnumKit/EnumKit.cna"));
 include(script_resource("PersistKit/PersistKit.cna"));
 include(script_resource("PrivescKit/PrivescKit.cna"));
 elog("All kits loaded");
-
