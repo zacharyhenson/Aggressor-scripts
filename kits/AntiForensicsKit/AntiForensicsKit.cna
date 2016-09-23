@@ -27,6 +27,23 @@ popup beacon_bottom {
 					bpowershell($1, "Check-VM");
 				}
 			}
+			menu "Prefetch Management" {
+				item "Disable Prefetch" {
+					local('$bid');
+					foreach $bid ($1) {
+						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "0"');
+						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "0"');
+						#bshell($1,'net stop eventlog /f');
+					}
+				}
+				item "Enable Prefetch" {
+						local('$bid');
+						foreach $bid ($1) {
+							bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "3"');
+							bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "1"');
+					}
+				}
+			}
 		}
 	}
 }
