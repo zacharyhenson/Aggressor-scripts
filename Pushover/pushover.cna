@@ -49,7 +49,7 @@ on beacon_initial {
 }
 
 on ssh_initial {
-	$push = exec("/usr/bin/pushover-cs CS:New_SSH New SSH Session Received - ID: $1 | Hostname " . bshell($1, "hostname"));
+	$push = exec("/usr/bin/pushover-cs CS:New_SSH New SSH Session Received - ID: $1 | Hostname " . binfo($1, "computer"));
 	@pushdata = readAll($push);
 	closef($push);
 }
