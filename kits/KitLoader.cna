@@ -1,11 +1,10 @@
 # This script simply loads all of the kits in this repository. Just load this one, and it'll load the rest
 # @Und3rf10w
 
-elog("Aggressor Kit started, loading kits...");
 include(script_resource("AnnoyKit/AnnoyKit.cna"));
 include(script_resource("AntiForensicsKit/AntiForensicsKit.cna"));
 include(script_resource("CredKit/CredKit.cna"));
 include(script_resource("EnumKit/EnumKit.cna"));
 include(script_resource("PersistKit/PersistKit.cna"));
 include(script_resource("PrivescKit/PrivescKit.cna"));
-elog("All kits loaded");
+elog("Aggressor Kit loaded by " . data_query('metadata')['nick']);
