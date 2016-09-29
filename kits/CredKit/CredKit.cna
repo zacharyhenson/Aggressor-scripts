@@ -55,7 +55,7 @@ popup beacon_bottom {
 	}
 }
 
-pupup ssh {
+popup ssh {
 	menu "CredKit" {
 		item "Find bitcoin addresses"{
 			local('$bid');
