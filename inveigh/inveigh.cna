@@ -2,6 +2,16 @@
 # No HTTPS, Inveigh-Relay or Inveigh-Bruteforce support at this time
 # @Und3rf10w
 
+
+# TODO:
+	# Successful command I executed was:
+	# 	powershell-import Inveigh-Unprivileged.ps1
+	#	powershell Invoke-InveighUnprivileged -ConsoleOutput N -RunTime 10 -Tool 2 -LLMNR Y -NBNS Y
+	# I assume that I can do the same for the Inveigh.ps1
+# TODO: 
+#	* 1st phase: build out a weaksauce menu select for unprivileged and privileged inveigh. Prompt for Runtime
+#	* 2nd phase: build out a proper Java Swing menu to customize the options for unprivileged and privileged inveigh
+
 sub invoke-inveigh {
 	# $1 = ID of beacon
 	# $2 = IP of beacon

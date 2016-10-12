@@ -8,10 +8,24 @@ popup beacon_bottom {
 				local('$bid');
 				foreach $bid ($1){
 					binput($1, "powershell-import PowerView.ps1");
-					bpowershell_import($1, script_resource("scripts/PowerView.ps1"));
+					bpowershell_import($1, script_resource("kits/EnumKit/scripts/PowerView.ps1"));
 					binput($1, "powershell Invoke-ShareFinder -CheckShareAccess");
 					bpowershell($1, "Invoke-ShareFinder -CheckShareAccess");
 				}
+			}
+		}
+		item "Determine Architecture (64 vs 32)" {
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "Get OS Architecture");
+				bshell($1, "wmic os get osarchitecture");
+			}
+		}
+		item "Show Host Uptime" {
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "Get Host Uptime");
+				bpowershell($1, "net statistics server| Select-String \"Statistics since\"");
 			}
 		}
 		item "List WLAN Profiles"{

