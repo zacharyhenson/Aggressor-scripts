@@ -8,7 +8,7 @@ popup beacon_bottom {
 				local('$bid');
 				foreach $bid ($1){
 					binput($1, "powershell-import PowerView.ps1");
-					bpowershell_import($1, script_resource("kits/EnumKit/scripts/PowerView.ps1"));
+					bpowershell_import($1, script_resource("EnumKit/scripts/PowerView.ps1"));
 					binput($1, "powershell Invoke-ShareFinder -CheckShareAccess");
 					bpowershell($1, "Invoke-ShareFinder -CheckShareAccess");
 				}
