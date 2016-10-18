@@ -7,4 +7,4 @@ include(script_resource("CredKit/CredKit.cna"));
 include(script_resource("EnumKit/EnumKit.cna"));
 include(script_resource("PersistKit/PersistKit.cna"));
 include(script_resource("PrivescKit/PrivescKit.cna"));
-elog("Aggressor Kit loaded by " . data_query('metadata')['nick']);
+elog("Aggressor Kit loaded by " . mynick());
