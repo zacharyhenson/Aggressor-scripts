@@ -44,10 +44,10 @@ Most of the useful scripts here are organized in [kits](kits). All you have to d
 
   Actions in this kit center around endpoint privilege escalation. Actions that involve forceful scanning (powerup.ps1, unix-privesc-check) should go in the apporiate section
 
-# Other scripts
+## Other scripts
 >inveigh/ 
 
-I couldn't get this to work properly, but it's supposed to be [Inveigh](https://github.com/Kevin-Robertson/Inveigh) support for Cobalt Strike.
+Runs [Inveigh](https://github.com/Kevin-Robertson/Inveigh) against the selected machine(s) for a specified amount of time. This does automatically enable LLMNR and NBNS spoofing.
 
 >Pushover/
 

