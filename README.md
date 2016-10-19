@@ -1,7 +1,7 @@
 # Aggressor Scripts
 This is just a random collection of Aggressor Scripts I've written for [Cobalt Strike](https://www.cobaltstrike.com) 3.x.
 
-Please note that most of them probably don't work properly, and could probably use some tweaking to better suit your environment.
+Please note that most of them could probably use some tweaking to better suit your environment/tactics.
 
 Shoot me any questions and feel free to submit a pull request for any improvements you may have!
 

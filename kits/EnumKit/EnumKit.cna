@@ -49,5 +49,12 @@ popup beacon_bottom {
 				bpowershell($1, "(New-Object System.Net.WebClient).DownloadString(\"http://ipinfo.io\")");
 			}
 		}
+		item "List Installed Applications"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "shell wmic product get Name,Version,Description /format:csv");
+				bshell($1, "wmic product get Name,Version,Description /format:csv");
+			}
+		}
 	}
 }
