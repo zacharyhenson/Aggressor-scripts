@@ -43,5 +43,25 @@ popup beacon_bottom {
 				}
 			}
 		}
+		menu "Carbon Black" {
+			item "Block Carbon Black (<= 7.2.3P2)"{
+				local('$bid');
+				foreach $bid ($1) {
+					openOrActivate($bid);
+					bpowershell_import($bid, script_resource("AntiForensicsKit/scripts/Block-CarbonBlack.ps1"));
+					binput($bid, "powershell Block-CarbonBlack");
+					bpowershell($bid, "Block-CarbonBlack");
+				}
+			}
+			item "Restore Carbon Black"{
+				local('$bid');
+				foreach $bid ($1) {
+					openOrActivate($bid);
+					bpowershell_import($bid, script_resource("AntiForensicsKit/scripts/Block-CarbonBlack.ps1"));
+					binput($bid, "powershell Restore-CarbonBlack");
+					bpowershell($bid, "Restore-CarbonBlack");
+				}
+			}
+		}
 	}
 }
