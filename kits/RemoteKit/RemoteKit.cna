@@ -6,6 +6,8 @@
 #
 # This is just a start, there's tons more I'd like to add. This kit currently does not
 # do anything as far as token management, so it assumes you have a valid token for the remote target.
+#
+# THIS IS ALL UNTESTED
 
 
 sub GetTargetName{
@@ -63,6 +65,7 @@ popup beacon_bottom {
 				}
 			}
 			item "Upload a file from beacon to target"{
+				# TODO: see above TODO.
 				local('$bid');
 				foreach $bid ($1){
 					$beaconid = $1;
