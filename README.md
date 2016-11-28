@@ -44,6 +44,10 @@ Most of the useful scripts here are organized in [kits](kits). All you have to d
 
   Actions in this kit center around endpoint privilege escalation. Actions that involve forceful scanning (powerup.ps1, unix-privesc-check) should go in the apporiate section
 
+8. **RemoteKit**
+
+  Actions in this kit center around interacting with remote hosts.
+
 ## Other scripts
 >inveigh/ 
 
