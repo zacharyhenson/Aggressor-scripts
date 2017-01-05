@@ -31,6 +31,14 @@ command !who{
 	println("\c7Current logged on users are: \cF" . data_query('users'));
 }
 
+# This command shows a hostname of every sessions that happened, active or inactive. Basically just to provide a list of pwned hosts.
+command !pwn3d_hosts {
+	foreach $session (data_query('sessions')) { 
+		$computer = $session['computer']; 
+		println($computer); 
+	}
+}
+
 popup beacon_bottom {
 	menu "DebugKit" {
 		item "Notify at next check-in"{
