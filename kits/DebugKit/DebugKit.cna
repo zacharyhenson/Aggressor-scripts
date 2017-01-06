@@ -39,6 +39,15 @@ command !pwn3d_hosts {
 	}
 }
 
+# This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
+alias !iscsadmin{
+	if (-isadmin $1){
+		blog($1, "Beacon is admin");
+	} else{ 
+		blog($1, "Beacon is not admin");
+	}
+}
+
 popup beacon_bottom {
 	menu "DebugKit" {
 		item "Notify at next check-in"{

