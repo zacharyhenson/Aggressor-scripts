@@ -60,8 +60,7 @@ command !query_data_key {
 # Syncs all of the downloads on the teamserver to a specified path. Recursively recreates the file structure as it was on the system the file was downloaded from
 #  This is not very safe to use.
 #  TODO: Figure out how to get the content of a file stored on the teamserver
-#  TODO: As an additional argument, take the ip address of a host to only download all the files for that host.
-#	USAGE: !sync_all_downloads </path/on/client/machine/to/save/downloads/to>
+#	USAGE: !sync_all_downloads [/path/on/client/machine/to/save/downloads/to] <IP address of host to download files for>
 command !sync_all_downloads {
 	$file_path = $1; # TODO: sanity check, $1 MUST be provided.
 	if (!-exists $file_path){
@@ -76,6 +75,11 @@ command !sync_all_downloads {
 		exit("Can not write to specified directory");
 	}
 	foreach $file (downloads()){
+		if ($2){
+			if (!$file['host'] eq $2){
+				continue
+			} 
+		}
 		println("Processing download for " . size(downloads()) . " files...");
 		$newpath = $file['path']; 
 		$newpath = strrep($newpath, "\\", "/");
