@@ -56,5 +56,14 @@ popup beacon_bottom {
 				bshell($1, "wmic product get Name,Version,Description /format:csv");
 			}
 		}
+		menu "Carbon Black"{
+			item "Get CB Server Location"{
+				local('$bid');
+				foreach $bid ($1){
+					binput($1, "shell type C:\\Windows\\CarbonBlack\\Sensor.LOG | findstr SensorBackendServer");
+					bshell($1, "type C:\\Windows\\CarbonBlack\\Sensor.LOG | findstr SensorBackendServer");
+				}
+			}
+		}
 	}
 }
