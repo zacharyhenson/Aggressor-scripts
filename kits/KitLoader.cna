@@ -50,7 +50,12 @@ ssh_alias head {
 		berror($1, "Error: You must specify a file");
 	}
 }
-ssh_command_register("head", "Print the first 10 lines of a file", "Use: head [file]\n\nDisplays first 10 lines of [file]")
+ssh_command_register("head", "Print the first 10 lines of a file", "Use: head [file]\n\nDisplays first 10 lines of [file]");
+
+ssh_alias ps {
+	bshell($1, "ps aux");
+}
+ssh_command_register("ps", "Show process list", "Use: ps\n\nShows a list of processes");
 
 
 ############################
