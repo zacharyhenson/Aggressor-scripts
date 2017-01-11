@@ -28,7 +28,10 @@ command !c2_sample_client{
 
 # This shows a list of everyone that's connected to the teamserver:
 command !who{
-	println("\c7Current logged on users are: \cF" . data_query('users'));
+	println("\c7Currently logged on users on this teamserver are:"); 
+	foreach $user (data_query('users')){ 
+		println("\c3 * \cF $user"); 
+	}
 }
 
 # This command shows a hostname of every sessions that happened, active or inactive. Basically just to provide a list of pwned hosts.
@@ -163,6 +166,18 @@ popup beacon_bottom {
 						berror($bid, "\c4ERROR! No active powershell modules");
 					}
 				}
+			}
+		}
+	}
+}
+
+popup ssh {
+	menu "DebugKit"{
+		item "Display Session ID"{
+			local('$bid');
+			foreach $bid ($1) {
+				openOrActivate($bid);
+				blog($bid, "This session's ID is: " . binfo($bid, "id"));
 			}
 		}
 	}

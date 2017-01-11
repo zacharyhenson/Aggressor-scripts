@@ -8,3 +8,60 @@ include(script_resource("EnumKit/EnumKit.cna"));
 include(script_resource("PersistKit/PersistKit.cna"));
 include(script_resource("PrivescKit/PrivescKit.cna"));
 elog("Aggressor Kit loaded by " . mynick());
+
+# Useful aliases, placed in kitloader because I always have this loaded
+
+
+############################
+####### SSH ALIASES ########
+############################
+ssh_alias ls {
+	if(!$2){
+		bshell($1, "ls -la");
+	} else {
+		bshell($1, "ls -la $2");
+	}
+}
+
+ssh_command_register("ls", "Lists files", "Use: ls [folder]\n\nLists files in a folder");
+
+ssh_alias cat {
+	if ($2){
+		bshell($1, "cat $2");
+	} else {
+		berror($1, "Error: You must specify a file");
+	}
+}
+ssh_command_register("cat", "Displays the contents of a file", "Use: cat [file]\n\nDisplays the contents of [file]");
+
+ssh_alias tail {
+	if ($2){
+		bshell($1, "tail $2");
+	} else {
+		berror($1, "Error: You must specify a file");
+	}
+}
+ssh_command_register("tail", "Print the last 10 lines of a file", "Use: tail [file]\n\nDisplays last 10 lines of [file]");
+
+ssh_alias head {
+	if ($2){
+		bshell($1, "head $2");
+	} else {
+		berror($1, "Error: You must specify a file");
+	}
+}
+ssh_command_register("head", "Print the first 10 lines of a file", "Use: head [file]\n\nDisplays first 10 lines of [file]")
+
+
+############################
+###### BEACON ALIASES ######
+############################
+
+alias type {
+	if ($2){
+		bshell($1, "type $2");
+	} else {
+		berror($1, "Error: You must specify a file");
+	}
+}
+beacon_command_register("type", "Displays the contents of a file", "Use: type [file]\n\nDisplays the contents of [file]");
