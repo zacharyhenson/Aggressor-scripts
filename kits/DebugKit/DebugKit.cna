@@ -61,6 +61,7 @@ command !query_data_key {
 #  This is not very safe to use.
 #  TODO: Figure out how to get the content of a file stored on the teamserver
 #	USAGE: !sync_all_downloads [/path/on/client/machine/to/save/downloads/to] <IP address of host to download files for>
+<<<<<<< HEAD
 command !sync_all_downloads {
 	$file_path = $1; # TODO: sanity check, $1 MUST be provided.
 	if (!-exists $file_path){
@@ -102,6 +103,49 @@ command !sync_all_downloads {
 		# }
 #	}
 }
+=======
+# command !sync_all_downloads {
+# 	$file_path = $1; # TODO: sanity check, $1 MUST be provided.
+# 	if (!-exists $file_path){
+# 		mkdir($filepath);
+# 	}
+# 	if (!-isDir $file_path){
+# 		println("\c4 $file_path is not a directory");
+# 		exit("Specified direcotry is not a directory");
+# 	}
+# 	if (!-canwrite $file_path){
+# 		println("\c4 We can not write to $filepath (check permissions?)");
+# 		exit("Can not write to specified directory");
+# 	}
+# 	foreach $file (downloads()){
+# 		if ($2){
+# 			if (!$file['host'] eq $2){
+# 				continue
+# 			} 
+# 		}
+# 		println("Processing download for " . size(downloads()) . " files...");
+# 		$newpath = $file['path']; 
+# 		$newpath = strrep($newpath, "\\", "/");
+# 		if ($newpath eq ""){ $newpath = "/"; } # Sanity check in the event that the new path is blank
+# 		$newpath = $file_path + "/" + $file['host'] + "/" + $newpath;
+# 		if (!-exists $newpath){
+# 			mkdir($newpath);
+# 		}
+# 		# $fullfile = $newpath + $file['name'];
+# 		# TODO: Figure out how to get the content of a file sitting on the teamserver
+# 		# if (checkError($error)) {
+# 		# 	println("Error recieved while trying to write " . $fullfile . ": $error");
+# 		# }
+# 		# if (-canwrite $fullfile){
+# 		# 	$handle = openf(">>$fullfile");
+# 		# 	println($handle, $fileontheCSServer); #See TODO
+# 		# 	closef($handle);
+# 		# } else {
+# 		# 	println("Error while trying to write to $fullfile");
+# 		# }
+# 	}
+# }
+>>>>>>> refs/remotes/aggressor-scripts/master
 
 # This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
 alias !iscsadmin{
