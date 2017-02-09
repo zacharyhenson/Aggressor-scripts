@@ -74,20 +74,20 @@ command !sync_all_downloads {
 		println("\c4 We can not write to $filepath (check permissions?)");
 		exit("Can not write to specified directory");
 	}
-	foreach $file (downloads()){
-		if ($2){
-			if (!$file['host'] eq $2){
-				continue
-			} 
-		}
-		println("Processing download for " . size(downloads()) . " files...");
-		$newpath = $file['path']; 
-		$newpath = strrep($newpath, "\\", "/");
-		if ($newpath eq ""){ $newpath = "/"; } # Sanity check in the event that the new path is blank
-		$newpath = $file_path + "/" + $file['host'] + "/" + $newpath;
-		if (!-exists $newpath){
-			mkdir($newpath);
-		}
+#	foreach $file (downloads()){
+#		if ($2){
+#			if ( ! $file['host'] eq $2 ){
+#				continue
+#			} 
+#		}
+#		println("Processing download for " . size(downloads()) . " files...");
+#		$newpath = $file['path']; 
+#		$newpath = strrep($newpath, "\\", "/");
+#		if ($newpath eq ""){ $newpath = "/"; } # Sanity check in the event that the new path is blank
+#		$newpath = $file_path + "/" + $file['host'] + "/" + $newpath;
+#		if (!-exists $newpath){
+#			mkdir($newpath);
+#		}
 		# $fullfile = $newpath + $file['name'];
 		# TODO: Figure out how to get the content of a file sitting on the teamserver
 		# if (checkError($error)) {
@@ -100,7 +100,7 @@ command !sync_all_downloads {
 		# } else {
 		# 	println("Error while trying to write to $fullfile");
 		# }
-	}
+#	}
 }
 
 # This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
