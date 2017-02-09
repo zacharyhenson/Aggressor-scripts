@@ -57,3 +57,7 @@ Runs [Inveigh](https://github.com/Kevin-Robertson/Inveigh) against the selected 
 [Pushover](https://pushover.net) support for Cobalt Strike, ridiculously useful.
 
 See [pushover-cs](Pushover/pushover-cs) for instructions.
+
+>Reports/
+
+These are reporting (.rpt) scripts created for Cobalt Strike.
