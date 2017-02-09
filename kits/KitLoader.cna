@@ -7,6 +7,7 @@ include(script_resource("CredKit/CredKit.cna"));
 include(script_resource("EnumKit/EnumKit.cna"));
 include(script_resource("PersistKit/PersistKit.cna"));
 include(script_resource("PrivescKit/PrivescKit.cna"));
+include(script_resource("ThirdParty/thirdparty.cna"));
 elog("Aggressor Kit loaded by " . mynick());
 
 # Useful aliases, placed in kitloader because I always have this loaded

@@ -18,7 +18,7 @@ Most of the useful scripts here are organized in [kits](kits). All you have to d
 ### Kit descriptions
 1. **AnnoyKit**
 
-  Actions in this kit center around miscellaneous fun thta generally involve messing with the user
+  Actions in this kit center around miscellaneous fun that generally involve messing with the user
 
 2. **AntiForensicsKit**
 
@@ -43,6 +43,9 @@ Most of the useful scripts here are organized in [kits](kits). All you have to d
 7. **PrivEscKit**
 
   Actions in this kit center around endpoint privilege escalation. Actions that involve forceful scanning (powerup.ps1, unix-privesc-check) should go in the apporiate section
+
+8. **ThirdParty**
+  This is is just a random collection of .cna scripts that other people have created that I like to use. I just have it loaded with kitloader for conveience. There may be changes to the third party scripts to better integerate with my workflow.
 
 ## Other scripts
 >inveigh/ 

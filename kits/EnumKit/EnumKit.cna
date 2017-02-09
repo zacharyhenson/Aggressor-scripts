@@ -56,6 +56,14 @@ popup beacon_bottom {
 				bshell($1, "wmic product get Name,Version,Description /format:csv");
 			}
 		}
+		item "Import Get-MicrophoneAudio"{
+			local('$bid');
+			foreach $bid ($1){
+				binput($1, "powershell-import Get-MicrophoneAudio.ps1");
+				bpowershell_import($1, script_resource("EnumKit/scripts/Get-MicrophoneAudio.ps1"));
+				blog($1, "Once imported, run \c8Get-Help Get-MicrophoneAudio -full\c0 for full usage instructions");
+			}
+		}
 		menu "Carbon Black"{
 			item "Get CB Server Location"{
 				local('$bid');
