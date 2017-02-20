@@ -61,7 +61,6 @@ command !query_data_key {
 #  This is not very safe to use.
 #  TODO: Figure out how to get the content of a file stored on the teamserver
 #	USAGE: !sync_all_downloads [/path/on/client/machine/to/save/downloads/to] <IP address of host to download files for>
-<<<<<<< HEAD
 command !sync_all_downloads {
 	$file_path = $1; # TODO: sanity check, $1 MUST be provided.
 	if (!-exists $file_path){
@@ -102,8 +101,6 @@ command !sync_all_downloads {
 		# 	println("Error while trying to write to $fullfile");
 		# }
 #	}
-}
-=======
 # command !sync_all_downloads {
 # 	$file_path = $1; # TODO: sanity check, $1 MUST be provided.
 # 	if (!-exists $file_path){
@@ -145,7 +142,6 @@ command !sync_all_downloads {
 # 		# }
 # 	}
 # }
->>>>>>> refs/remotes/aggressor-scripts/master
 
 # This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
 alias !iscsadmin{
