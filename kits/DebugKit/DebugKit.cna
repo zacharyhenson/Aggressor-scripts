@@ -141,7 +141,7 @@ command !sync_all_downloads {
 # 		# 	println("Error while trying to write to $fullfile");
 # 		# }
 # 	}
-# }
+}
 
 # This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
 alias !iscsadmin{
