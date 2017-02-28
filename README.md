@@ -52,6 +52,10 @@ Most of the useful scripts here are organized in [kits](kits). All you have to d
 
 Runs [Inveigh](https://github.com/Kevin-Robertson/Inveigh) against the selected machine(s) for a specified amount of time. This does automatically enable LLMNR and NBNS spoofing.
 
+>Ebowla/
+
+Adds interoperability between Cobalt Strike and [Ebowla](https://github.com/Genetic-Malware/Ebowla). I plan on making this process much more integrated and automated, but at this time, you can generate an Ebowla payload within Cobalt Strike by going to ```Attacks -> Generate Ebowla Payload```. See [ewbowla-interop.cna](Ebowla/ebowla-interop.cna) for instructions.
+
 >Pushover/
 
 [Pushover](https://pushover.net) support for Cobalt Strike, ridiculously useful.
