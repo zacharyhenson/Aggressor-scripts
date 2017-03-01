@@ -245,7 +245,7 @@ sub saveEbowlaConfig {
 	$returnValue = wait($genEbowlaPayload, 10 * 1000);
 	if ($returnValue == 0) {
 		$answer = search(@pushPayloadGen, &vaildPathCriteria);
-		if ($answer	ne $null){
+		if ($answer ne $null){
 			@generatedPathArray = split(': ', $answer, 2); 
 			show_message("Payload has been generated at: " . cwd() . "/output/" . @generatedPathArray[1]);
 		}

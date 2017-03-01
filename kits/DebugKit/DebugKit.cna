@@ -143,6 +143,55 @@ command !sync_all_downloads {
 # 	}
 }
 
+# Generates and display a process tree for the selected beacon.
+# Use this to determine your current beacon's exposure to HIDS. 
+# I've ran into situations where HIDS/AV will attempt to kill as many parents of a malicous process as possible
+
+sub pstreeBpsArray {
+	@ps_arry = split('\n', $2);
+	$b_pid = beacon_info($1, "pid");
+	treeBuilder(@ps_arry, $b_pid, 0);
+	pstreeCreate(@tree, size(@tree));
+	blog($1, $treeoutput);
+}
+
+sub treeBuilder{
+	$b_pid = $2;
+	@ps_arry = $1;
+	$x = $3;
+	foreach $entry (@ps_arry){
+		($name, $ppid, $pid) = split("\\s+", $entry);
+		if ($pid eq $b_pid){
+			@tree[$x][0] = $name;
+			@tree[$x][1] = $pid;
+			@tree[$x][2] = $ppid;
+			treeBuilder(@ps_arry, $ppid, $x++);
+		}
+	}
+}
+
+sub pstreeCreate {
+	$y = 0;
+	$first_time_bool = true;
+	@full_tree = $1;
+	println(@full_tree);
+	$x = $2;
+	$x--;
+	while ($x >= 0){ 
+		$spacer = ("\t" x $y);
+		if (@full_tree[$x][0] ne $null){
+			if ($first_time_bool ne true){
+				$treeoutput = $treeoutput . "\n" . $spacer . "↳ ";
+			}
+		}
+		$first_time_bool = false;
+		$treeoutput = $treeoutput . "(" . @full_tree[$x][1] . ") " . @full_tree[$x][0];
+		$x--;
+		$y++;
+	}
+	return $treeoutput;
+}
+
 # This alias checks whether CS thinks the beacon is an admin based on the '-isadmin' function
 alias !iscsadmin{
 	if (-isadmin $1){
@@ -182,6 +231,14 @@ popup beacon_bottom {
 				sleep(1);
 				binput($1, "powershell (New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
 				bpowershell($1, "(New-Object System.Net.WebClient).DownloadString(\"$httpDebugURL\")");
+			}
+		}
+		item "Show beacon's process tree"{
+			local('$bid');
+			foreach $bid ($1) {
+				blog($bid, "Generate this beacon's process tree...")
+				$b_pid = beacon_info($bid, "pid");
+				@ps_arry = wait(bps($bid, &pstreeBpsArray));
 			}
 		}
 		menu "Loaded PowerShell"{
