@@ -60,14 +60,12 @@ sub ebowlaHelperConfigPopup {
 	[$payloadInputPanel add: $btnInputBrowse];
 	
 	# Logic for the browse button:
-
-	########### TODO: FIX THIS. THIS PART ISN'T WORKING ##############
-	# [$btnInputBrowse addActionListener: lambda({
-	# 	prompt_file_open("Select your input payload", &closure, false{
-	# 			$inputPayloadPath = $1;
-	# 			[$textFieldPayloadInput setText: $inputPayloadPath];
-	# 		});
-	# })];
+	[$btnInputBrowse addActionListener: lambda({
+		prompt_file_open("Select your input payload", &closure, false,{
+				$inputPayloadPath = $1;
+				[$textFieldPayloadInput setText: $inputPayloadPath];
+			});
+	})];
 	
 	# Panel for selecting the output type
 	$outputPanel = [new JPanel];
@@ -253,6 +251,7 @@ sub saveEbowlaConfig {
 		}
 		closef($genEbowlaPayload);
 	} else {
+		printAll(@pushPayloadGen);
 		show_error("Something went wrong when trying to generate payload. Please see Script Console for more info");
 		closef($genEbowlaPayload);
 	}
