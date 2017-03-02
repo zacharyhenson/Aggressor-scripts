@@ -236,9 +236,9 @@ popup beacon_bottom {
 		item "Show beacon's process tree"{
 			local('$bid');
 			foreach $bid ($1) {
-				blog($bid, "Generate this beacon's process tree...")
-				$b_pid = beacon_info($bid, "pid");
-				@ps_arry = wait(bps($bid, &pstreeBpsArray));
+				blog($1, "Generate this beacon's process tree...")
+				$b_pid = beacon_info($1, "pid");
+				@ps_arry = wait(bps($1, &pstreeBpsArray));
 			}
 		}
 		menu "Loaded PowerShell"{
