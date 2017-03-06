@@ -244,7 +244,7 @@ sub saveEbowlaConfig {
 	# Wait up to 10 seconds for the payload to be generated.
 	$returnValue = wait($genEbowlaPayload, 10 * 1000);
 	if ($returnValue == 0) {
-		$answer = search(@pushPayloadGen, &vaildPathCriteria);
+		$answer = search(@pushPayloadGen, &validPathCriteria);
 		if ($answer ne $null){
 			@generatedPathArray = split(': ', $answer, 2); 
 			show_message("Payload has been generated at: " . cwd() . "/output/" . @generatedPathArray[1]);
@@ -342,7 +342,7 @@ sub processEbowlaConfig{
 	# Wait up to 10 seconds for the payload to be generated.
 	$returnValue = wait($genEbowlaPayload, 10 * 1000);
 	if ($returnValue == 0) {
-		$answer = search(@pushPayloadGen, &vaildPathCriteria);
+		$answer = search(@pushPayloadGen, &validPathCriteria);
 		if ($answer ne $null){
 			@generatedPathArray = split(': ', $answer, 2); 
 			$rtnPayload = cwd() . "/output/" . @generatedPathArray[1];
@@ -359,7 +359,7 @@ sub processEbowlaConfig{
 }
 
 
-sub vaildPathCriteria{
+sub validPathCriteria{
 	return iff("[*] Writing" isin $1, "$1", $null); 
 }
 
