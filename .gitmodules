@@ -4,3 +4,6 @@
 [submodule "Persistence/OutlookPersistence"]
 	path = Persistence/OutlookPersistence
 	url = https://github.com/Und3rf10w/OutlookPersistence.git
+[submodule "Bloodhound/BloodHound"]
+	path = Bloodhound/BloodHound
+	url = https://github.com/BloodHoundAD/BloodHound

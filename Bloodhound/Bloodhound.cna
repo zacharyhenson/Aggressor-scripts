@@ -1,0 +1,23 @@
+# Adds menu driven support for BloodHound
+# Zack Henson
+
+sub run_bloodhound {
+    $bid = $1;
+    binput($bid, "powershell-import " . script_resource("BloodHound/PowerShell/BloodHound.ps1"));
+    bpowershell_import($bid, script_resource("BloodHound/PowerShell/BloodHound.ps1"));
+    prompt_text("CSV output folder (on remote machine)", "C:\\Temp", {
+        binput($bid, "powershell Invoke-BloodHound -CSVFolder $1");
+        bpowershell($bid, "Invoke-BloodHound -CSVFolder $1");
+    });
+}
+
+popup beacon_bottom {
+    menu "Bloodhound"{
+        item "Run Bloodhound"{
+            local('$bid');
+            foreach $bid ($1){
+                run_bloodhound($bid);
+            }
+        }
+    }
+}
