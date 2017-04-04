@@ -7,3 +7,6 @@
 [submodule "Bloodhound/BloodHound"]
 	path = Bloodhound/BloodHound
 	url = https://github.com/BloodHoundAD/BloodHound
+[submodule "Kerberoast/cc1004307157e372fc5bd3f89e553059"]
+	path = Kerberoast/kerberoast
+	url = https://gist.github.com/HarmJ0y/cc1004307157e372fc5bd3f89e553059
