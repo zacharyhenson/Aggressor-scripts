@@ -4,3 +4,6 @@
 [submodule "Persistence/OutlookPersistence"]
 	path = Persistence/OutlookPersistence
 	url = https://github.com/Und3rf10w/OutlookPersistence.git
+[submodule "Kerberoast/cc1004307157e372fc5bd3f89e553059"]
+	path = Kerberoast/kerberoast
+	url = https://gist.github.com/HarmJ0y/cc1004307157e372fc5bd3f89e553059

